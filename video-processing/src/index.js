@@ -6,7 +6,7 @@ import { config } from "./config/config.js";
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
 import dotenv from "dotenv";
-import { existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, statSync } from "fs";
 import db from "./lib/db.js";
 
 dotenv.config({});
@@ -48,6 +48,10 @@ const main = async () => {
   try {
     console.log(`[video-processing] Downloading from S3: bucket=${bucketName} key=${inputKey}`);
     await downloadFromS3(bucketName, inputKey, inputFilePath);
+    
+    const stats = fs.statSync(inputFilePath);
+    console.log(`[video-processing] Downloaded file size: ${stats.size} bytes`);
+    
     await processVideo(
       inputKey,
       inputFilePath,

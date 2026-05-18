@@ -10,7 +10,7 @@ import { config } from "../config/config.js";
 dotenv.config({});
 
 const s3Client = new S3Client({
-  region: config.AWS_REGION,
+  region: config.AWS_REGION || "eu-north-1",
   credentials: {
     accessKeyId: config.AWS_ACCESS_KEY,
     secretAccessKey: config.AWS_SECRET_ACCESS_KEY,
