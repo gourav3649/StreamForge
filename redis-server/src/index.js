@@ -4,9 +4,19 @@ import { config } from "./config/config.js";
 import { fork } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
+import http from "http";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Health check HTTP server — required by Render Web Service to detect an open port
+const PORT = process.env.PORT || 3001;
+http.createServer((req, res) => {
+  res.writeHead(200);
+  res.end("StreamForge Worker: OK");
+}).listen(PORT, () => {
+  console.log(`[Health] HTTP health check listening on port ${PORT}`);
+});
 
 const Wait = () => new Promise((res, rej) => setTimeout(() => res(), 5000));
 
