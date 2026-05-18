@@ -49,7 +49,7 @@ const main = async () => {
     console.log(`[video-processing] Downloading from S3: bucket=${bucketName} key=${inputKey}`);
     await downloadFromS3(bucketName, inputKey, inputFilePath);
     
-    const stats = fs.statSync(inputFilePath);
+    const stats = statSync(inputFilePath);
     console.log(`[video-processing] Downloaded file size: ${stats.size} bytes`);
     
     await processVideo(
