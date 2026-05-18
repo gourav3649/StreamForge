@@ -2,6 +2,8 @@ import { currentUserData } from "@/actions/user-actions";
 import redisClient from "@/lib/redis-client";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request): Promise<NextResponse> {
   try {
     const user = await currentUserData();
