@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
-import Editor from "./_components/Editor";
+import dynamic from "next/dynamic";
 import { EditorStore } from "@/store/editor-store";
 import { LayerStore } from "@/store/layer-store";
+
+// Fix "document is not defined" by disabling Server-Side Rendering for the Editor
+const Editor = dynamic(() => import("./_components/Editor"), { ssr: false });
 
 export default function Page() {
   return (
