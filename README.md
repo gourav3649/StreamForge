@@ -1,106 +1,207 @@
-# StreamForge: Video Transcoder & AI Image/Video Editor 🚀
+# StreamForge 🚀
 
-Welcome to **StreamForge**, an all-in-one platform designed to simplify and automate video transcoding, image/video editing, and more! This powerful tool allows you to transcode videos into multiple formats, edit images and videos using AI-powered features, and integrate cloud-based storage seamlessly. Whether you're a content creator, marketer, or developer, **StreamForge** can help you streamline your workflow.
-
-## Features 🎬
-
-### 1. **Seamless Video Transcoding** 🔄
-
-Effortlessly transcode videos into multiple formats, including HSL, and store them directly to **AWS S3**. No more worries about different video formats or compatibility issues.
-
-### 2. **AI-Powered Video/Image Editing** 🖼️
-
-- **Background Removal**: Remove unwanted backgrounds from images or videos with just a click.
-- **Background Replacement**: Replace the background of your videos with an AI-generated backdrop, making it easy to produce high-quality content.
-- **Smart Video Cropper**: Automatically crop videos based on important content areas to save time and effort.
-- **Caption Generator**: Auto-generate captions for your videos to enhance accessibility and engagement.
-
-### 3. **Cloud Integration** ☁️
-
-- **AWS S3** for seamless cloud storage and delivery of media files.
-- Process and store large media files efficiently and scale as needed.
+**StreamForge** is an all-in-one AI-powered video transcoding and media editing platform. Upload videos, transcode them to HLS multi-resolution format, and use AI tools (smart crop, background removal, transcription, and more) — all from a single clean dashboard.
 
 ---
 
 ## Tech Stack 💻
 
-### Frontend:
-
-- ⚛️ **Next.js** – A powerful framework for React, used for server-side rendering and static site generation.
-- 🎨 **Tailwind CSS** – A utility-first CSS framework for rapidly building custom designs.
-- ⚙️ **Shadcn** – UI components for modern and beautiful interfaces.
-- 🌟 **Aceternity UI** – A customizable UI library to enhance user experience.
-- 🧩 **Zustand** – A simple state management library for React.
-
-### Backend:
-
-- 🐳 **AWS S3** – Cloud storage solution for saving and serving media files.
-- 🧑‍💻 **Redis** – Used for fast data caching and managing job queues.
-- 🧑‍💼 **BullMQ** – A powerful queue system for handling background jobs and transcoding tasks.
-- 🖼️ **Cloudinary** – Used for image and video processing, including transcoding and background removal.
-- 🔐 **Clerk** – Provides authentication and user management.
-- 🧳 **Prisma** – ORM for easy interaction with PostgreSQL, ensuring type-safe database queries.
-- 🧩 **Zod** – Used for runtime type validation to ensure data integrity.
-- 📤 **Uploadcare** – Seamless file uploads for images and videos.
-- 💳 **Stripe** – Integrated payment gateway for transactions.
-
-### Database:
-
-- 🗃️ **PostgreSQL** – A relational database for storing user data, video details, captions, and more.
-
-### Cloud & Deployment:
-
-- 🐳 **AWS ECR & ECS** – For managing Dockerized applications and smooth deployment.
-- ⚡ **Serverless architecture** – Optimized for scalability and cost-efficiency.
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 14, Tailwind CSS, shadcn/ui, Zustand |
+| Auth | Clerk |
+| Database | PostgreSQL (Neon) + Prisma ORM |
+| Queue | BullMQ + Upstash Redis |
+| Storage | AWS S3 |
+| AI Editing | Cloudinary AI |
+| Payments | Stripe |
+| Video Processing | FFmpeg (Node.js child_process) |
 
 ---
 
-## How It Works 🛠️
+## Prerequisites
 
-1. **Video Transcoding**:
+Before running the project, make sure you have:
 
-   - Upload your video file via **Uploadcare**.
-   - Select the desired output format and resolution.
-   - The system processes the video in the background using **BullMQ** and **Redis**.
-   - The final transcoded video is stored in **AWS S3** for fast and scalable delivery.
-
-2. **AI Image & Video Editing**:
-
-   - Use the built-in **Cloudinary** and **AI tools** for background removal and replacement, making edits easier and faster.
-   - The **Smart Video Cropper** analyzes your video and crops it intelligently based on the most relevant parts of the video content.
-   - **Caption Generation** uses speech-to-text technology to add captions automatically.
-
-3. **Cloud Integration**:
-   - All processed files are stored in **AWS S3**, ensuring they are securely stored and easily accessible.
-   - The **Prisma** ORM interacts with the PostgreSQL database to store user information, video metadata, captions, and more.
+- **Node.js** v18+ installed
+- **npm** v9+ installed
+- **ffmpeg** installed and available in your system PATH
+  - Windows: Download from https://ffmpeg.org/download.html and add `bin/` to PATH
+  - Mac: `brew install ffmpeg`
+  - Linux: `sudo apt install ffmpeg`
+- Accounts on: **Clerk**, **Neon (PostgreSQL)**, **Upstash (Redis)**, **AWS S3**, **Cloudinary**, **Stripe**
 
 ---
 
-# ScreenShots 📸
+## Project Structure
 
-![1_IMG_1](web/public/screenshots/1_IMG_1.png)
+```
+media-flow-main/
+├── web/                  # Next.js frontend (deploy to Vercel)
+├── redis-server/         # BullMQ worker (deploy to Render/Railway)
+└── video-processing/     # FFmpeg transcoding script (called by redis-server)
+```
 
-![2_IMG_2](web/public/screenshots/2_IMG_2.png)
+---
 
-![2_IMG_2_2](web/public/screenshots/2_IMG_2_2.png)
+## Running Locally
 
-![3_IMG_3](web/public/screenshots/3_IMG_3.png)
+### Step 1 — Install Dependencies
 
-![4_IMG_4](web/public/screenshots/4_IMG_4.png)
+Open **three separate terminals** and run:
 
-![5_IMG_5](web/public/screenshots/5_IMG_5.png)
+```bash
+# Terminal 1 — Frontend
+cd web; npm install
 
-![6_IMG_6](web/public/screenshots/6_IMG_6.png)
+# Terminal 2 — Background Worker
+cd redis-server; npm install
 
-# Contributing 🤝
+# Terminal 3 — Video Processor (no need to run manually, spawned by redis-server)
+cd video-processing; npm install
+```
 
-We welcome contributions to improve StreamForge! Feel free to submit a pull request or open an issue if you have any suggestions, bugs, or feature requests.
+### Step 2 — Configure Environment Variables
 
-# Acknowledgments 🙏
+Each package needs its own `.env` file. Copy the examples below.
 
-- Cloudinary for providing exceptional image/video processing capabilities.
-- AWS for cloud storage solutions.
-- Prisma and PostgreSQL for seamless database management.
-- Stripe for easy payment processing integration
+#### `web/.env`
+```env
+# Clerk Auth
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
-**Thank you** 💖 for checking out StreamForge! I’m excited to see how this project will help users automate video processing, editing, and cloud storage management. 🌍
+# Database (Neon PostgreSQL)
+DATABASE_URL=postgresql://...
+
+# App URL
+NEXT_PUBLIC_URL=http://localhost:3000
+NEXT_PUBLIC_DOMAIN=localhost:3000
+NEXT_PUBLIC_SCHEME=http://
+
+# Cloudinary
+CLOUDINARY_NAME=your_cloud_name
+CLOUDINARY_KEY=your_api_key
+CLOUDINARY_SECRET=your_api_secret
+CLOUDINARY_URL=cloudinary://...
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
+
+# AWS S3
+AWS_ACCESS_KEY=AKIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=ap-south-1
+VIDEO_BUCKET=your-raw-videos-bucket
+VIDEO_UPLOAD_KEY=_videos_output
+NEXT_PUBLIC_TARGET_VIDEO_BUCKET=your-processed-videos-bucket
+
+# Upstash Redis
+REDIS_URL=rediss://default:...@...upstash.io:6379
+
+# Stripe
+STRIPE_SECRET=sk_test_...
+
+# Uploadcare
+NEXT_PUBLIC_UPLOAD_CARE_PUBLIC_KEY=...
+```
+
+#### `redis-server/.env`
+```env
+REDIS_URL=rediss://default:...@...upstash.io:6379
+AWS_ACCESS_KEY=AKIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=ap-south-1
+VIDEO_BUCKET=your-raw-videos-bucket
+PROCESSED_VIDEO_BUCKET=your-processed-videos-bucket
+DATABASE_URL=postgresql://...
+```
+
+#### `video-processing/.env`
+```env
+AWS_ACCESS_KEY=AKIA...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=ap-south-1
+VIDEO_BUCKET=your-raw-videos-bucket
+PROCESSED_VIDEO_BUCKET=your-processed-videos-bucket
+DATABASE_URL=postgresql://...
+```
+
+### Step 3 — Set up the Database
+
+```bash
+cd web
+npx prisma db push
+```
+
+### Step 4 — Start the Application
+
+Open **two terminals** and run simultaneously:
+
+```bash
+# Terminal 1 — Start the Next.js frontend
+cd web
+npm run dev
+# → App runs at http://localhost:3000
+
+# Terminal 2 — Start the Redis background worker
+cd redis-server
+npm start
+# → Worker starts listening for video processing jobs
+```
+
+> ⚠️ **Keep both terminals open at the same time.** The worker in Terminal 2 processes videos in the background when you upload from the frontend.
+
+### Step 5 — Test the Flow
+
+1. Open `http://localhost:3000` in your browser
+2. Sign up / sign in
+3. Go to **Video Transcoding** in the sidebar
+4. Drop a video file and click **Upload Video**
+5. Watch Terminal 2 — it will log the processing job
+6. The video status will change from `QUEUE` → `PROCESSING` → `PROCESSED`
+
+---
+
+## Deployment
+
+### Frontend → Vercel
+
+1. Push `web/` to a GitHub repository
+2. Connect the repo to [Vercel](https://vercel.com)
+3. Set all `web/.env` variables in Vercel's **Environment Variables** dashboard
+4. Update `NEXT_PUBLIC_URL` to your Vercel production URL
+
+### Background Worker → Render or Railway
+
+1. Push `redis-server/` to GitHub (or use a monorepo)
+2. Create a **Web Service** on [Render](https://render.com) or [Railway](https://railway.app)
+3. Set **Start Command** to: `node src/index.js`
+4. Set all `redis-server/.env` variables in the service environment settings
+5. Deploy — the worker will stay alive and process jobs from Upstash Redis
+
+> ℹ️ **No Docker required.** The video processing runs as a native Node.js child process on the host machine.
+
+---
+
+## Features
+
+- 🎬 **Video Transcoding** — Upload → HLS multi-resolution output stored in S3
+- ✂️ **AI Smart Crop** — Reframe videos for YouTube, TikTok, Instagram
+- 🌐 **Auto Transcription** — Generate captions in multiple languages
+- 🖼️ **Background Removal/Replacement** — Powered by Cloudinary AI
+- 🔒 **Secure Sharing** — Embeddable iframes with domain locks & expiration
+- 📊 **Analytics** — View time, engagement tracking per video
+- 💳 **Billing** — Stripe-powered plans (Hobby, Pro, Unlimited)
+
+---
+
+## Contributing 🤝
+
+Pull requests are welcome! If you find a bug or have a feature suggestion, open an issue.
+
+---
+
+**Thank you for using StreamForge!** 🌍
