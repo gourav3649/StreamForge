@@ -36,7 +36,8 @@ export async function POST(req: NextRequest) {
       })
     );
 
-    const s3Url = `https://${process.env.VIDEO_BUCKET}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+    const region = process.env.S3_REGION || process.env.NEXT_PUBLIC_AWS_REGION || "eu-north-1";
+    const s3Url = `https://${process.env.VIDEO_BUCKET}.s3.${region}.amazonaws.com/${key}`;
     console.log(`[upload] Success: ${s3Url}`);
 
     return NextResponse.json({
