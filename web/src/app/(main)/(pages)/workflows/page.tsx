@@ -47,23 +47,37 @@ export default function Home() {
     const filename = `${timestamp}_${file.name}`;
 
     try {
-      // Send file directly to our Next.js server — no CORS issues
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("filename", filename);
-
-      const uploadResponse = await fetch("/api/video/upload", {
+      // Request a presigned URL from our Next.js API
+      const presignedRes = await fetch("/api/video/upload", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filename: filename,
+          contentType: file.type,
+        }),
+      });
+
+      if (!presignedRes.ok) {
+        const err = await presignedRes.json();
+        throw new Error(err.error || "Failed to get upload URL");
+      }
+
+      const { presignedUrl, url: s3Url } = await presignedRes.json();
+
+      // Upload directly to S3 using the presigned URL (Bypasses Vercel limits!)
+      const uploadResponse = await fetch(presignedUrl, {
+        method: "PUT",
+        body: file,
+        headers: {
+          "Content-Type": file.type,
+        },
       });
 
       if (!uploadResponse.ok) {
-        const err = await uploadResponse.json();
-        throw new Error(err.error || "Upload failed");
+        throw new Error("Failed to upload file to S3");
       }
-
-      const json = await uploadResponse.json();
-      const s3Url = json.url;
 
       await createVideo({
         title: file.name,
