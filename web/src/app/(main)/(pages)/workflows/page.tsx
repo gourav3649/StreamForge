@@ -47,37 +47,26 @@ export default function Home() {
     const filename = `${timestamp}_${file.name}`;
 
     try {
-      // Request a presigned URL from our Next.js API
-      const presignedRes = await fetch("/api/video/upload", {
+      // 1. Get Presigned URL from Next.js API
+      const presignRes = await fetch("/api/video/presigned-url", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          filename: filename,
-          contentType: file.type,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename, fileType: file.type }),
       });
 
-      if (!presignedRes.ok) {
-        const err = await presignedRes.json();
-        throw new Error(err.error || "Failed to get upload URL");
-      }
+      if (!presignRes.ok) throw new Error("Failed to get upload URL");
+      const { uploadUrl, publicUrl } = await presignRes.json();
 
-      const { presignedUrl, url: s3Url } = await presignedRes.json();
-
-      // Upload directly to S3 using the presigned URL (Bypasses Vercel limits!)
-      const uploadResponse = await fetch(presignedUrl, {
+      // 2. Upload file directly to S3 (bypasses Vercel's 4.5MB limit)
+      const uploadResponse = await fetch(uploadUrl, {
         method: "PUT",
         body: file,
-        headers: {
-          "Content-Type": file.type,
-        },
+        headers: { "Content-Type": file.type },
       });
 
-      if (!uploadResponse.ok) {
-        throw new Error("Failed to upload file to S3");
-      }
+      if (!uploadResponse.ok) throw new Error("S3 Upload failed");
+
+      const s3Url = publicUrl;
 
       await createVideo({
         title: file.name,
