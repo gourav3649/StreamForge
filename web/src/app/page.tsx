@@ -254,7 +254,7 @@ export default function Home() {
               </ul>
 
               <Link
-                href="/dashboard"
+                href="/billing"
                 className={`inline-flex items-center justify-center h-10 rounded-lg text-sm font-medium transition-colors duration-200 ${
                   plan.highlighted
                     ? "bg-violet-500 text-white hover:bg-violet-600"
