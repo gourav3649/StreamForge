@@ -46,11 +46,6 @@ export interface VideoAnalytics {
   createdAt: Date;
 }
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 
 export interface Video {
   id: string;
