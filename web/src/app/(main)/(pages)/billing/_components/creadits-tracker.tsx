@@ -8,25 +8,23 @@ type Props = {
 };
 
 const CreditTracker = ({ credits, tier }: Props) => {
+  const used = isNaN(credits) ? 0 : credits;
+  const total = tier === "Unlimited" ? "Unlimited" : tier === "Pro" ? 100 : 10;
+  
+  const percentage = total === "Unlimited" ? 100 : Math.min(100, Math.max(0, (used / (total as number)) * 100));
+
   return (
     <div className="p-6">
       <Card className="p-6">
         <CardContent className="flex flex-col gap-6">
           <CardTitle className="font-light">Credit Tracker</CardTitle>
           <Progress
-            value={
-              tier == "Free"
-                ? credits * 10
-                : tier == "Unlimited"
-                ? 100
-                : credits
-            }
+            value={percentage}
             className="w-full"
           />
           <div className="flex justify-end">
             <p>
-              {credits}/
-              {tier == "Free" ? 10 : tier == "Pro" ? 100 : "Unlimited"}
+              {used}/{total}
             </p>
           </div>
         </CardContent>

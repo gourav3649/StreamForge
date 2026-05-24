@@ -52,10 +52,10 @@ const MenuOptions = ({ className }: Props) => {
                     <Link
                       href={menuItem.href}
                       className={clsx(
-                        "group h-8 w-8 flex items-center justify-center scale-[1.5] rounded-lg p-[3px] cursor-pointer transition-colors duration-200",
+                        "group h-10 w-10 flex items-center justify-center rounded-lg p-[3px] cursor-pointer transition-colors duration-200",
                         {
-                          "dark:bg-violet-500/20 bg-violet-100":
-                            pathName === menuItem.href,
+                          "bg-[var(--accent-subtle)]": pathName === menuItem.href,
+                          "bg-transparent hover:bg-[var(--bg-elevated)]": pathName !== menuItem.href
                         }
                       )}
                     >
@@ -67,7 +67,7 @@ const MenuOptions = ({ className }: Props) => {
                 </TooltipTrigger>
                 <TooltipContent
                   side="right"
-                  className="bg-white/90 dark:bg-black/80 backdrop-blur-xl border-black/10 dark:border-white/10 text-black dark:text-white"
+                  className="bg-[var(--bg-surface)] border border-[var(--bg-border)] text-[var(--text-primary)] font-sans text-[12px] px-3 py-1.5 rounded-md"
                 >
                   <p>{menuItem.name}</p>
                 </TooltipContent>

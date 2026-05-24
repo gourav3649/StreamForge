@@ -23,74 +23,94 @@ html {
 
 @layer base {
   :root {
-    --background: 0 0% 98%; /* #FAFAFA */
-    --foreground: 240 10% 4%; /* #09090B */
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 4%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 4%;
-    --primary: 258 90% 66%; /* #8B5CF6 Violet 500 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 10% 4%;
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
-    --accent: 240 5% 96%;
-    --accent-foreground: 240 10% 4%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 258 90% 66%;
-    --radius: 0.75rem; /* Smoother radius */
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 258 90% 66%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 258 90% 66%;
+    /* Backgrounds */
+    --bg-base:        #F7F8FC;
+    --bg-surface:     #FFFFFF;
+    --bg-elevated:    #ECEEF8;
+    --bg-border:      #D0D4EE;
+
+    /* Text */
+    --text-primary:   #1A1A2E;
+    --text-secondary: #7880A0;
+    --text-muted:     #B0B6CC;
+
+    /* Brand */
+    --accent:         #5B4FCF;
+    --accent-hover:   #7165E0;
+    --accent-subtle:  #ECEEF8;
+
+    /* CTA */
+    --cta:            #E35A2F;
+    --cta-hover:      #F06A3D;
+
+    /* Semantic */
+    --success:        #3B6D11;
+    --warning:        #854F0B;
+    --danger:         #A32D2D;
+    --info:           #185FA5;
+
+    /* Existing Tailwind Fallbacks using new colors */
+    --background: var(--bg-base);
+    --foreground: var(--text-primary);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent);
+    --primary-foreground: #FFFFFF;
+    --secondary: var(--bg-elevated);
+    --secondary-foreground: var(--text-secondary);
+    --muted: var(--bg-elevated);
+    --muted-foreground: var(--text-muted);
+    --border: var(--bg-border);
+    --input: var(--bg-border);
+    --ring: var(--accent);
+    --radius: 0.75rem;
   }
 
-  .dark {
-    --background: 240 10% 4%; /* #09090B Deep slate */
-    --foreground: 0 0% 98%; /* #FAFAFA */
-    --card: 240 10% 4%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 258 90% 66%; /* #8B5CF6 */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 258 90% 66%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 10% 4%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 258 90% 66%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4% 16%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 4% 16%;
-    --sidebar-ring: 258 90% 66%;
+  :root[data-theme="dark"], .dark {
+    /* Backgrounds */
+    --bg-base:        #0D0E14;
+    --bg-surface:     #14151F;
+    --bg-elevated:    #1C1E2E;
+    --bg-border:      #2A2D42;
+
+    /* Text */
+    --text-primary:   #E8E2FF;
+    --text-secondary: #6A6E8A;
+    --text-muted:     #3A3D55;
+
+    /* Brand */
+    --accent:         #6253E1;
+    --accent-hover:   #7465F5;
+    --accent-subtle:  #1C1E2E;
+
+    /* CTA */
+    --cta:            #FF6B6B;
+    --cta-hover:      #FF8080;
+
+    /* Semantic */
+    --success:        #1D9E75;
+    --warning:        #BA7517;
+    --danger:         #E24B4A;
+    --info:           #4FA8D5;
+
+    /* Existing Tailwind Fallbacks using new colors */
+    --background: var(--bg-base);
+    --foreground: var(--text-primary);
+    --card: var(--bg-surface);
+    --card-foreground: var(--text-primary);
+    --popover: var(--bg-surface);
+    --popover-foreground: var(--text-primary);
+    --primary: var(--accent);
+    --primary-foreground: #FFFFFF;
+    --secondary: var(--bg-elevated);
+    --secondary-foreground: var(--text-secondary);
+    --muted: var(--bg-elevated);
+    --muted-foreground: var(--text-muted);
+    --border: var(--bg-border);
+    --input: var(--bg-border);
+    --ring: var(--accent);
   }
 }
 

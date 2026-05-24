@@ -47,22 +47,24 @@ const Settings = async (props: Props) => {
       <h1 className=" top-0 z-[10] flex items-center justify-between border-b bg-background/50 p-6 text-4xl backdrop-blur-lg">
         <span>Settings</span>
       </h1>
-      <div className="flex flex-col gap-10 p-6">
-        <div>
-          <h2 className="text-2xl font-bold">User Profile</h2>
-          <p className="text-base text-white/50">
-            Add or update your information
-          </p>
-        </div>
+      <div className="p-6 max-w-4xl">
+        <div className="bg-[var(--bg-surface)] border border-[var(--bg-border)] rounded-xl p-8 flex flex-col gap-10">
+          <div>
+            <h2 className="text-2xl font-bold font-sans text-[var(--text-primary)]">User Profile</h2>
+            <p className="text-base text-[var(--text-secondary)] mt-1">
+              Add or update your information
+            </p>
+          </div>
 
-        <div className="flex flex-col items-center justify-start gap-10 md:gap-[100px] md:flex-row">
-          <ProfilePicture
-            userImage={user?.profileImage || ""}
-            onDelete={removeProfileImage}
-            onUpload={uploadProfileImage}
-          />
-          <div className="flex-1 w-full md:max-w-[400px]">
-            <ProfileForm user={user} onUpdate={updateUserInfo} />
+          <div className="flex flex-col items-start gap-10 md:gap-[100px] md:flex-row">
+            <ProfilePicture
+              userImage={user?.profileImage || ""}
+              onDelete={removeProfileImage}
+              onUpload={uploadProfileImage}
+            />
+            <div className="flex-1 w-full max-w-[400px]">
+              <ProfileForm user={user} onUpdate={updateUserInfo} />
+            </div>
           </div>
         </div>
       </div>

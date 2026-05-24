@@ -335,9 +335,16 @@ export default function Home() {
                 </TableBody>
               </Table>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 text-neutral-500">
-                <Video size={32} className="mb-3 text-neutral-600" />
-                <p className="text-sm">No videos uploaded yet</p>
+              <div className="flex flex-col items-center justify-center py-16 px-6 border border-dashed border-[var(--bg-border)] rounded-xl bg-transparent">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-elevated)] mb-4">
+                  <Video className="w-6 h-6 text-[var(--text-secondary)]" />
+                </div>
+                <h3 className="text-lg font-medium text-[var(--text-primary)] font-sans mb-2">
+                  No media found
+                </h3>
+                <p className="text-sm text-[var(--text-secondary)] text-center max-w-sm">
+                  Upload a video to start transcoding or generating AI edits.
+                </p>
               </div>
             )}
           </div>

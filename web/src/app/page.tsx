@@ -103,50 +103,48 @@ export default function Home() {
       <Navbar />
 
       {/* ─── Hero Section ─── */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden">
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden bg-[var(--bg-base)]">
         {/* Subtle gradient orbs — lightweight, no animation */}
-        <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-indigo-500/8 blur-[100px] pointer-events-none" />
+        <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[600px] h-[600px] rounded-full bg-[var(--accent)]/10 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--cta)]/5 blur-[100px] pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8">
+        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8 flex flex-col items-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-sm text-neutral-400">
-            <Zap size={14} className="text-violet-400" />
-            AI-Powered Video Processing
+          <div className="inline-flex items-center gap-2 px-[14px] py-[4px] rounded-[20px] border border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[13px] text-[var(--text-secondary)]">
+            <Zap size={14} className="text-[var(--accent)]" />
+            AI-powered video processing
           </div>
 
           {/* Heading */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.1]">
-            <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-neutral-500">
-              Transform your media
+          <h1 className="text-[64px] font-normal tracking-tight leading-[1.1] font-serif">
+            <span className="text-[var(--text-primary)]">
+              Your media,
             </span>
             <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-indigo-400">
-              with StreamForge
+            <span className="text-[var(--cta)] italic">
+              processed in seconds.
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-            Transcode videos into multiple resolutions, edit with AI-powered
-            tools, and manage your entire media workflow — all from one
-            platform.
+          <p className="text-[18px] text-[var(--text-secondary)] max-w-[520px] mx-auto leading-[1.7] font-sans">
+            Transcode, edit, and deliver video at any resolution — all in one platform.
           </p>
 
           {/* CTA */}
           <div className="flex items-center justify-center gap-4 pt-2">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 h-12 px-8 rounded-lg bg-white text-black text-sm font-semibold hover:bg-neutral-200 transition-colors duration-200"
+              className="inline-flex items-center gap-2 rounded-[8px] px-[24px] py-[12px] bg-[var(--cta)] hover:bg-[var(--cta-hover)] text-white text-sm font-medium transition-colors duration-200"
             >
-              Get Started Free
+              Start for free
               <ArrowRight size={16} />
             </Link>
             <Link
               href="#features"
-              className="inline-flex items-center gap-2 h-12 px-8 rounded-lg border border-white/10 text-sm font-medium text-neutral-300 hover:bg-white/5 transition-colors duration-200"
+              className="inline-flex items-center gap-2 rounded-[8px] px-[24px] py-[12px] border border-[var(--bg-border)] bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--accent)] text-sm font-medium transition-colors duration-200"
             >
-              See Features
+              See how it works
             </Link>
           </div>
         </div>
