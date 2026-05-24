@@ -157,10 +157,10 @@ export default function Home() {
           <label htmlFor="video" className="cursor-pointer block">
             <div
               className={cn(
-                "flex flex-col items-center justify-center gap-4 py-16 px-8 rounded-xl border-2 border-dashed transition-all duration-300",
+                "flex flex-col items-center justify-center gap-4 py-16 px-8 rounded-xl border-2 border-dashed transition-all duration-300 backdrop-blur-sm",
                 isDropping
-                  ? "border-violet-500 bg-violet-500/5"
-                  : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+                  ? "border-primary bg-primary/10 scale-[1.02]"
+                  : "border-black/10 dark:border-white/10 bg-white/50 dark:bg-white/[0.02] hover:border-primary/50 hover:bg-primary/5 hover:scale-[1.01]"
               )}
               onDragOver={(e) => {
                 if (isUploading) return;
@@ -186,8 +186,8 @@ export default function Home() {
                 }
               }}
             >
-              <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
-                <Upload size={24} className="text-violet-400" />
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Upload size={24} className="text-primary" />
               </div>
               <div className="text-center">
                 <p className="text-sm text-neutral-400">

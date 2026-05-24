@@ -3,8 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import MenuOptions from ".";
 import { Menu } from "lucide-react";
 import Layers from "./index";
-import { Tooltip, TooltipProvider } from "@/components/ui/tooltip";
-import { TooltipContent, TooltipTrigger } from "@radix-ui/react-tooltip";
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function LayersSideBar() {
   return (
@@ -12,18 +11,18 @@ export default function LayersSideBar() {
       <Sheet>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <SheetTrigger asChild>
                 <Menu />
               </SheetTrigger>
-              <SheetContent
+            </TooltipTrigger>
+            <SheetContent
                 side={"right"}
                 className=" p-0 m-0 overflow-y-scroll"
               >
                 <Layers />
-              </SheetContent>
-            </TooltipTrigger>
-            <TooltipContent side="top">
+            </SheetContent>
+            <TooltipContent side="top" className="bg-white/90 dark:bg-black/80 backdrop-blur-xl border-black/10 dark:border-white/10 text-black dark:text-white">
               <p>Open Layers</p>
             </TooltipContent>
           </Tooltip>
