@@ -130,25 +130,41 @@ export default function Layers() {
         ))}
       </CardContent>
 
-      <div className="sticky bottom-0 bg-card flex flex-col md:flex-row  gap-2 shrink-0 p-1">
-        <Button
-          onClick={() => {
-            addLayer({
-              id: crypto.randomUUID(),
-              url: "",
-              height: 0,
-              width: 0,
-              publicId: "",
-              name: "",
-              format: "",
-            });
-          }}
-          className="w-full flex gap-2 rounded-none"
-          variant={"outline"}
-        >
-          <span>Create Layers</span>
-          <Layers2 className="text-secondary-foreground" size={18} />
-        </Button>
+      <div className="sticky bottom-0 bg-card flex flex-col gap-2 shrink-0 p-1">
+        <div className="flex gap-2 w-full">
+          <Button
+            onClick={() => {
+              addLayer({
+                id: crypto.randomUUID(),
+                url: "",
+                height: 0,
+                width: 0,
+                publicId: "",
+                name: "",
+                format: "",
+              });
+            }}
+            className="w-full flex gap-2 rounded-none"
+            variant={"outline"}
+          >
+            <span>Create Layer</span>
+            <Layers2 className="text-secondary-foreground" size={18} />
+          </Button>
+
+          <Button
+            onClick={() => {
+              if (generating) return;
+              if (confirm("Are you sure you want to start over? This will clear all current layers.")) {
+                useLayerStore.getState().clearLayers();
+              }
+            }}
+            className="w-full flex gap-2 rounded-none"
+            variant={"destructive"}
+            disabled={generating}
+          >
+            <span>Start Over</span>
+          </Button>
+        </div>
 
         <Button
           disabled={

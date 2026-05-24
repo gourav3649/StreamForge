@@ -31,6 +31,7 @@ type State = {
   comparedLayers: string[];
   setComparedLayers: (layers: string[]) => void;
   toggleComparedLayer: (id: string) => void;
+  clearLayers: () => void;
 };
 
 const getStore = (initialState: {
@@ -99,6 +100,13 @@ const getStore = (initialState: {
               layerComparisonMode: newComparedLayers.length > 0,
             };
           }),
+        clearLayers: () =>
+          set(() => ({
+            layers: [],
+            activeLayer: {} as Layer,
+            layerComparisonMode: false,
+            comparedLayers: [],
+          })),
       }),
       {
         name: "layer-storage",
