@@ -1,5 +1,8 @@
+"use client";
+
 import Navbar from "@/components/global/navbar";
 import Link from "next/link";
+import { useState } from "react";
 import {
   CheckIcon,
   X,
@@ -65,7 +68,6 @@ const pricingPlans = [
       { text: "Priority support", included: false },
     ],
     cta: "Start Free",
-    highlighted: false,
   },
   {
     name: "Pro",
@@ -79,7 +81,6 @@ const pricingPlans = [
       { text: "Priority support", included: true },
     ],
     cta: "Upgrade to Pro",
-    highlighted: true,
   },
   {
     name: "Unlimited",
@@ -93,11 +94,12 @@ const pricingPlans = [
       { text: "24/7 priority support", included: true },
     ],
     cta: "Go Unlimited",
-    highlighted: false,
   },
 ];
 
 export default function Home() {
+  const [selectedPlan, setSelectedPlan] = useState("Pro");
+
   return (
     <main className="flex items-center justify-center flex-col bg-[var(--bg-base)] text-[var(--text-primary)]">
       <Navbar />
@@ -156,13 +158,13 @@ export default function Home() {
         className="w-full max-w-6xl mx-auto px-6 py-24"
       >
         <div className="text-center mb-16 space-y-4">
-          <p className="text-sm font-medium text-violet-400 uppercase tracking-wider">
+          <p className="text-sm font-medium text-[var(--accent)] uppercase tracking-wider">
             Features
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
             Everything you need for video
           </h2>
-          <p className="text-neutral-400 max-w-xl mx-auto">
+          <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
             From transcoding to AI editing, StreamForge gives you a complete
             toolkit to process, enhance, and share your media.
           </p>
@@ -172,13 +174,13 @@ export default function Home() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="group p-6 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-300"
+              className="group p-6 rounded-xl border border-[var(--bg-border)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] transition-all duration-300 shadow-sm"
             >
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-violet-500/10 mb-4">
-                <feature.icon size={20} className="text-violet-400" />
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--accent-subtle)] mb-4">
+                <feature.icon size={20} className="text-[var(--accent)]" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
+              <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)]">{feature.title}</h3>
+              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                 {feature.description}
               </p>
             </div>
@@ -192,95 +194,99 @@ export default function Home() {
         className="w-full max-w-6xl mx-auto px-6 py-24"
       >
         <div className="text-center mb-16 space-y-4">
-          <p className="text-sm font-medium text-violet-400 uppercase tracking-wider">
+          <p className="text-sm font-medium text-[var(--accent)] uppercase tracking-wider">
             Pricing
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
             Simple, transparent pricing
           </h2>
-          <p className="text-neutral-400 max-w-xl mx-auto">
+          <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
             Start free, upgrade when you need more power. No hidden fees.
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {pricingPlans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative flex flex-col p-8 rounded-xl border transition-all duration-300 ${
-                plan.highlighted
-                  ? "border-violet-500/50 bg-violet-500/[0.05]"
-                  : "border-white/[0.06] bg-white/[0.02] hover:border-white/10"
-              }`}
-            >
-              {plan.highlighted && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-violet-500 text-xs font-semibold text-white">
-                  Popular
-                </div>
-              )}
-
-              <div className="mb-6">
-                <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-sm text-neutral-500">
-                    {plan.period}
-                  </span>
-                </div>
-                <p className="text-sm text-neutral-400 mt-2">
-                  {plan.description}
-                </p>
-              </div>
-
-              <ul className="space-y-3 mb-8 flex-1">
-                {plan.features.map((f, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm">
-                    {f.included ? (
-                      <CheckIcon size={16} className="text-emerald-400 shrink-0" />
-                    ) : (
-                      <X size={16} className="text-neutral-600 shrink-0" />
-                    )}
-                    <span
-                      className={
-                        f.included ? "text-neutral-300" : "text-neutral-600"
-                      }
-                    >
-                      {f.text}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href="/billing"
-                className={`inline-flex items-center justify-center h-10 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                  plan.highlighted
-                    ? "bg-violet-500 text-white hover:bg-violet-600"
-                    : "border border-white/10 text-neutral-300 hover:bg-white/5"
+          {pricingPlans.map((plan) => {
+            const isHighlighted = selectedPlan === plan.name;
+            return (
+              <div
+                key={plan.name}
+                onClick={() => setSelectedPlan(plan.name)}
+                className={`cursor-pointer relative flex flex-col p-8 rounded-xl border transition-all duration-300 ${
+                  isHighlighted
+                    ? "border-[var(--accent)] bg-[var(--accent-subtle)]"
+                    : "border-[var(--bg-border)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)]"
                 }`}
               >
-                {plan.cta}
-              </Link>
-            </div>
-          ))}
+                {isHighlighted && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[var(--accent)] text-xs font-semibold text-white">
+                    Selected
+                  </div>
+                )}
+
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold mb-1 text-[var(--text-primary)]">{plan.name}</h3>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-[var(--text-primary)]">{plan.price}</span>
+                    <span className="text-sm text-[var(--text-secondary)]">
+                      {plan.period}
+                    </span>
+                  </div>
+                  <p className="text-sm text-[var(--text-secondary)] mt-2">
+                    {plan.description}
+                  </p>
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((f, i) => (
+                    <li key={i} className="flex items-center gap-3 text-sm">
+                      {f.included ? (
+                        <CheckIcon size={16} className="text-emerald-500 shrink-0" />
+                      ) : (
+                        <X size={16} className="text-[var(--text-muted)] shrink-0" />
+                      )}
+                      <span
+                        className={
+                          f.included ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"
+                        }
+                      >
+                        {f.text}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href="/billing"
+                  className={`inline-flex items-center justify-center h-10 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    isHighlighted
+                      ? "bg-[var(--accent)] text-white hover:opacity-90"
+                      : "border border-[var(--bg-border)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
+                  }`}
+                >
+                  {plan.cta}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       {/* ─── CTA Section ─── */}
       <section className="w-full max-w-4xl mx-auto px-6 py-24 text-center">
-        <div className="relative p-12 sm:p-16 rounded-2xl border border-white/[0.06] bg-gradient-to-b from-violet-500/[0.08] to-transparent overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.08),transparent_70%)] pointer-events-none" />
+        <div className="relative p-12 sm:p-16 rounded-2xl border border-[var(--bg-border)] bg-[var(--bg-surface)] overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--accent-subtle),transparent_70%)] pointer-events-none" />
           <div className="relative z-10 space-y-6">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
               Ready to streamline your workflow?
             </h2>
-            <p className="text-neutral-400 max-w-lg mx-auto">
+            <p className="text-[var(--text-secondary)] max-w-lg mx-auto">
               Join StreamForge and start processing your videos with AI-powered
               tools today. No credit card required.
             </p>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 h-12 px-8 rounded-lg bg-white text-black text-sm font-semibold hover:bg-neutral-200 transition-colors duration-200"
+              className="inline-flex items-center gap-2 h-12 px-8 rounded-lg bg-[var(--text-primary)] text-[var(--bg-base)] text-sm font-semibold hover:opacity-90 transition-opacity duration-200"
             >
               Get Started Free
               <ArrowRight size={16} />
@@ -290,17 +296,17 @@ export default function Home() {
       </section>
 
       {/* ─── Footer ─── */}
-      <footer className="w-full border-t border-white/[0.06] py-8 px-6">
+      <footer className="w-full border-t border-[var(--bg-border)] py-8 px-6 bg-[var(--bg-base)]">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600">
+            <div className="flex items-center justify-center w-6 h-6 rounded-md bg-[var(--accent)]">
               <Zap size={12} className="text-white" />
             </div>
-            <span className="text-sm font-medium text-neutral-400">
+            <span className="text-sm font-medium text-[var(--text-secondary)]">
               StreamForge
             </span>
           </div>
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-[var(--text-muted)]">
             © {new Date().getFullYear()} StreamForge. All rights reserved.
           </p>
         </div>
