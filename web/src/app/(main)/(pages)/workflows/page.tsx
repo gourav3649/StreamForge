@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -47,6 +48,11 @@ export default function Home() {
     const filename = `${timestamp}_${file.name}`;
 
     try {
+      // 0. Validate file size
+      if (file.size === 0) {
+        throw new Error("File is empty. Please select a valid video file.");
+      }
+
       // 1. Get Presigned URL from Next.js API
       const presignRes = await fetch("/api/video/presigned-url", {
         method: "POST",
@@ -57,23 +63,11 @@ export default function Home() {
       if (!presignRes.ok) throw new Error("Failed to get upload URL");
       const { uploadUrl, publicUrl } = await presignRes.json();
 
-      // 2. Upload file directly to S3 using XHR (bypasses Next.js fetch override bugs)
-      await new Promise<void>((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("PUT", uploadUrl);
-        xhr.setRequestHeader("Content-Type", file.type);
-        
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            resolve();
-          } else {
-            reject(new Error(`S3 Upload failed with status ${xhr.status}`));
-          }
-        };
-        
-        xhr.onerror = () => reject(new Error("S3 Upload network error"));
-        
-        xhr.send(file);
+      // 2. Upload file directly to S3 using axios
+      await axios.put(uploadUrl, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
       });
 
       const s3Url = publicUrl;
