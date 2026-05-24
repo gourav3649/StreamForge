@@ -151,16 +151,16 @@ export default function Home() {
         Video Transcoding
       </h1>
 
-      <div className="max-w-5xl mx-auto w-full px-4 py-6 space-y-8">
+      <div className="max-w-5xl mx-auto w-full px-6 py-6 space-y-8">
         {/* Upload Area */}
         <div>
           <label htmlFor="video" className="cursor-pointer block">
             <div
               className={cn(
-                "flex flex-col items-center justify-center gap-4 py-16 px-8 rounded-xl border-2 border-dashed transition-all duration-300 backdrop-blur-sm",
+                "flex flex-col items-center justify-center gap-3 py-14 px-8 rounded-xl border border-dashed transition-all duration-300",
                 isDropping
-                  ? "border-primary bg-primary/10 scale-[1.02]"
-                  : "border-black/10 dark:border-white/10 bg-white/50 dark:bg-white/[0.02] hover:border-primary/50 hover:bg-primary/5 hover:scale-[1.01]"
+                  ? "border-[var(--accent)] bg-[var(--accent-subtle)] scale-[1.02]"
+                  : "border-[var(--accent)]/50 bg-[var(--bg-surface)] hover:bg-[var(--accent-subtle)]"
               )}
               onDragOver={(e) => {
                 if (isUploading) return;
@@ -186,17 +186,20 @@ export default function Home() {
                 }
               }}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Upload size={24} className="text-primary" />
+              <div className="flex items-center justify-center mb-1">
+                <Upload size={24} className="text-[var(--accent)]" />
               </div>
               <div className="text-center">
-                <p className="text-sm text-neutral-400">
+                <p className="text-[15px] text-[var(--text-primary)] font-medium mb-1">
                   {isDropping
                     ? "Drop your video here..."
                     : "Drag and drop your video, or click to browse"}
                 </p>
+                <p className="text-[13px] text-[var(--text-secondary)]">
+                  Accepted: MP4, MOV, AVI, MKV, WebM • Max size: 2GB
+                </p>
                 {file && (
-                  <p className="text-sm text-white font-medium mt-2">
+                  <p className="text-sm text-[var(--text-primary)] font-medium mt-3">
                     {file.name}
                   </p>
                 )}
@@ -217,7 +220,7 @@ export default function Home() {
               <Button
                 onClick={handleUpload}
                 disabled={isUploading}
-                className="bg-violet-500 hover:bg-violet-600 text-white px-8"
+                className="bg-[var(--accent)] hover:opacity-90 text-white px-8"
               >
                 {isUploading ? (
                   <>
@@ -238,74 +241,65 @@ export default function Home() {
         {/* Videos Table */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Video size={20} className="text-violet-400" />
-              <h2 className="text-xl font-semibold">Uploaded Videos</h2>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-[var(--text-primary)]" />
+              <h2 className="text-[15px] font-medium text-[var(--text-primary)]">Uploaded Videos</h2>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 disabled={!!intervalId}
                 onClick={getAllVideos}
-                className="border-white/10 hover:bg-white/5"
+                className="px-3 py-1.5 text-[13px] font-medium bg-[var(--bg-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] rounded-md transition-colors"
               >
-                <RefreshCw size={14} className="mr-1" />
                 Refresh
-              </Button>
+              </button>
               {intervalId ? (
-                <Button
-                  size="sm"
-                  variant="outline"
+                <button
                   onClick={stopPolling}
-                  className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                  className="px-3 py-1.5 text-[13px] font-medium bg-[var(--accent)] text-white hover:opacity-90 rounded-md transition-colors"
                 >
-                  <Pause size={14} className="mr-1" />
                   Stop Polling
-                </Button>
+                </button>
               ) : (
-                <Button
-                  size="sm"
-                  variant="outline"
+                <button
                   onClick={startPolling}
-                  className="border-violet-500/30 text-violet-400 hover:bg-violet-500/10"
+                  className="px-3 py-1.5 text-[13px] font-medium bg-[var(--accent)] text-white hover:opacity-90 rounded-md transition-colors"
                 >
-                  <Play size={14} className="mr-1" />
                   Auto Refresh
-                </Button>
+                </button>
               )}
             </div>
           </div>
 
-          <div className="rounded-xl border border-white/[0.06] overflow-hidden">
+          <div className="w-full">
             {loading ? (
               <div className="w-full flex justify-center items-center h-24">
-                <Loader2 className="w-6 h-6 text-violet-400 animate-spin" />
+                <Loader2 className="w-6 h-6 text-[var(--accent)] animate-spin" />
               </div>
             ) : videos?.length > 0 ? (
-              <Table>
+              <Table className="border-collapse">
                 <TableHeader>
-                  <TableRow className="border-white/[0.06] hover:bg-transparent">
-                    <TableHead className="text-neutral-500">Video ID</TableHead>
-                    <TableHead className="text-neutral-500">Created</TableHead>
-                    <TableHead className="text-neutral-500">Source</TableHead>
-                    <TableHead className="text-neutral-500">Status</TableHead>
+                  <TableRow className="bg-[var(--bg-elevated)] border-none hover:bg-[var(--bg-elevated)]">
+                    <TableHead className="font-medium text-[var(--text-secondary)] h-10 w-[150px]">Video ID</TableHead>
+                    <TableHead className="font-medium text-[var(--text-secondary)] h-10">Created</TableHead>
+                    <TableHead className="font-medium text-[var(--text-secondary)] h-10">Source</TableHead>
+                    <TableHead className="font-medium text-[var(--text-secondary)] h-10 text-right">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {videos?.map((video: any) => (
                     <TableRow
                       key={video.key}
-                      className="border-white/[0.06] hover:bg-white/[0.02]"
+                      className="border-b border-[var(--bg-border)] hover:bg-[var(--bg-elevated)]"
                     >
-                      <TableCell className="font-mono text-xs text-neutral-400">
+                      <TableCell className="font-mono text-xs text-[var(--text-primary)]">
                         {video.key
                           ?.replace("video:", "")
                           ?.replace(":status", "")
                           ?.substring(0, 12)}
                         ...
                       </TableCell>
-                      <TableCell className="text-sm text-neutral-400">
+                      <TableCell className="text-[13px] text-[var(--text-secondary)]">
                         {new Date(
                           video?.video?.createdAt
                         )?.toLocaleDateString()}
@@ -315,15 +309,15 @@ export default function Home() {
                           href={video?.video?.originalUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-violet-400 hover:text-violet-300 underline underline-offset-2"
+                          className="text-[13px] text-[var(--accent)] hover:opacity-80 underline underline-offset-2"
                         >
                           View original
                         </a>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="text-right">
                         <span
                           className={cn(
-                            "text-xs font-semibold uppercase px-2 py-1 rounded-md",
+                            "text-[11px] font-semibold uppercase px-2 py-1 rounded-sm",
                             statusColor(video.status)
                           )}
                         >
@@ -335,15 +329,13 @@ export default function Home() {
                 </TableBody>
               </Table>
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 px-6 border border-dashed border-[var(--bg-border)] rounded-xl bg-transparent">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-elevated)] mb-4">
-                  <Video className="w-6 h-6 text-[var(--text-secondary)]" />
-                </div>
-                <h3 className="text-lg font-medium text-[var(--text-primary)] font-sans mb-2">
-                  No media found
+              <div className="flex flex-col items-center justify-center py-20 px-6 bg-transparent">
+                <div className="flex items-center justify-center w-5 h-5 bg-[var(--bg-border)] mb-4" />
+                <h3 className="text-[15px] font-medium text-[var(--text-primary)] font-sans mb-1">
+                  No videos yet
                 </h3>
-                <p className="text-sm text-[var(--text-secondary)] text-center max-w-sm">
-                  Upload a video to start transcoding or generating AI edits.
+                <p className="text-[13px] text-[var(--text-secondary)] text-center mb-4">
+                  Upload a file to begin transcoding
                 </p>
               </div>
             )}

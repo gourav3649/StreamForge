@@ -1,6 +1,5 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 type Props = {
   credits: number;
@@ -14,21 +13,20 @@ const CreditTracker = ({ credits, tier }: Props) => {
   const percentage = total === "Unlimited" ? 100 : Math.min(100, Math.max(0, (used / (total as number)) * 100));
 
   return (
-    <div className="p-6">
-      <Card className="p-6">
-        <CardContent className="flex flex-col gap-6">
-          <CardTitle className="font-light">Credit Tracker</CardTitle>
-          <Progress
-            value={percentage}
-            className="w-full"
+    <div className="w-full max-w-5xl mx-auto px-6">
+      <div className="flex flex-col gap-3 p-4 rounded-xl border border-[var(--bg-border)] bg-[var(--bg-elevated)] w-full">
+        <h3 className="text-[13px] font-medium text-[var(--text-primary)]">Credit tracker</h3>
+        <div className="w-full bg-[var(--bg-base)] h-3 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-[var(--accent)] rounded-full" 
+            style={{ width: `${percentage}%` }}
           />
-          <div className="flex justify-end">
-            <p>
-              {used}/{total}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="flex justify-between items-center text-[11px] text-[var(--text-secondary)] font-medium">
+          <span>{used} credits used</span>
+          <span>{total} total</span>
+        </div>
+      </div>
     </div>
   );
 };

@@ -36,39 +36,44 @@ const VideoTable = ({ videos }: VideoTableProps) => {
   }
   if (!videos || videos.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-6 border border-dashed border-[var(--bg-border)] rounded-xl bg-transparent">
-        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-elevated)] mb-4">
-          <VideoIcon className="w-6 h-6 text-[var(--text-secondary)]" />
-        </div>
-        <h3 className="text-lg font-medium text-[var(--text-primary)] font-sans mb-2">
-          No media found
+      <div className="flex flex-col items-center justify-center py-20 px-6 bg-transparent">
+        <div className="flex items-center justify-center w-5 h-5 bg-[var(--bg-border)] mb-4" />
+        <h3 className="text-[15px] font-medium text-[var(--text-primary)] font-sans mb-1">
+          No videos yet
         </h3>
-        <p className="text-sm text-[var(--text-secondary)] text-center max-w-sm">
-          Upload a video to start transcoding or generating AI edits.
+        <p className="text-[13px] text-[var(--text-secondary)] text-center mb-4">
+          Upload your first video to get started
         </p>
+        <button
+          onClick={() => router.push("/workflows")}
+          className="px-6 py-2 bg-[var(--cta)] hover:bg-[var(--cta-hover)] text-white text-[13px] font-medium rounded-md transition-colors"
+        >
+          Upload a video &rarr;
+        </button>
       </div>
     );
   }
 
   return (
-    <Table>
-      <TableCaption>A list of your videos.</TableCaption>
+    <div className="w-full">
+      <Table className="border-collapse">
+        <TableCaption className="hidden">A list of your videos.</TableCaption>
 
-      {/* Table Header */}
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[150px]">ID</TableHead>
-          <TableHead>Title</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead className="w-[300px]">Original URL</TableHead>
-          <TableHead>Thumbnail</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead className="text-right">Created At</TableHead>
-        </TableRow>
-      </TableHeader>
+        {/* Table Header */}
+        <TableHeader>
+          <TableRow className="bg-[var(--bg-elevated)] border-none hover:bg-[var(--bg-elevated)]">
+            <TableHead className="w-[150px] font-medium text-[var(--text-secondary)] h-10">ID</TableHead>
+            <TableHead className="font-medium text-[var(--text-secondary)] h-10">Title</TableHead>
+            <TableHead className="font-medium text-[var(--text-secondary)] h-10">Description</TableHead>
+            <TableHead className="w-[300px] font-medium text-[var(--text-secondary)] h-10 hidden sm:table-cell">Original URL</TableHead>
+            <TableHead className="font-medium text-[var(--text-secondary)] h-10 hidden sm:table-cell">Thumbnail</TableHead>
+            <TableHead className="font-medium text-[var(--text-secondary)] h-10">Status</TableHead>
+            <TableHead className="text-right font-medium text-[var(--text-secondary)] h-10">Created</TableHead>
+          </TableRow>
+        </TableHeader>
 
-      {/* Table Body */}
-      <TableBody>
+        {/* Table Body */}
+        <TableBody>
         {videos.map((video) => (
           <TableRow key={video.id}>
             {/* Video ID with clickable effect */}
@@ -148,6 +153,7 @@ const VideoTable = ({ videos }: VideoTableProps) => {
         </TableRow>
       </TableFooter>
     </Table>
+    </div>
   );
 };
 

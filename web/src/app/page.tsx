@@ -1,11 +1,6 @@
-"use client";
-
 import Navbar from "@/components/global/navbar";
 import Link from "next/link";
-import { useState } from "react";
 import {
-  CheckIcon,
-  X,
   Zap,
   Video,
   Scissors,
@@ -15,6 +10,7 @@ import {
   Image,
   ArrowRight,
 } from "lucide-react";
+import PricingSection from "@/components/global/pricing";
 
 const features = [
   {
@@ -55,99 +51,62 @@ const features = [
   },
 ];
 
-const pricingPlans = [
-  {
-    name: "Hobby",
-    price: "$0",
-    period: "forever",
-    description: "Perfect for exploring StreamForge's capabilities.",
-    features: [
-      { text: "3 transcodings / month", included: true },
-      { text: "100MB storage", included: true },
-      { text: "Basic editing tools", included: true },
-      { text: "Priority support", included: false },
-    ],
-    cta: "Start Free",
-  },
-  {
-    name: "Pro",
-    price: "$29",
-    period: "/ month",
-    description: "For creators who need speed and advanced tools.",
-    features: [
-      { text: "10 transcodings / month", included: true },
-      { text: "5GB storage", included: true },
-      { text: "All editing tools", included: true },
-      { text: "Priority support", included: true },
-    ],
-    cta: "Upgrade to Pro",
-  },
-  {
-    name: "Unlimited",
-    price: "$99",
-    period: "/ month",
-    description: "For teams and professionals with heavy workflows.",
-    features: [
-      { text: "Unlimited transcodings", included: true },
-      { text: "50GB storage", included: true },
-      { text: "Full tool suite", included: true },
-      { text: "24/7 priority support", included: true },
-    ],
-    cta: "Go Unlimited",
-  },
-];
-
 export default function Home() {
-  const [selectedPlan, setSelectedPlan] = useState("Pro");
-
   return (
     <main className="flex items-center justify-center flex-col bg-[var(--bg-base)] text-[var(--text-primary)]">
       <Navbar />
 
       {/* ─── Hero Section ─── */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16 overflow-hidden bg-[var(--bg-base)]">
-        {/* Subtle gradient orbs — lightweight, no animation */}
-        <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[600px] h-[600px] rounded-full bg-[var(--accent)]/10 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--cta)]/5 blur-[100px] pointer-events-none" />
+      <section className="relative w-full flex flex-col items-center justify-center px-4 sm:px-6 pt-28 pb-16 bg-[var(--bg-base)] min-h-screen">
+        <div className="w-full max-w-5xl mx-auto rounded-[32px] bg-[var(--bg-surface)] border border-[var(--bg-border)] dark:bg-transparent dark:border-none shadow-sm dark:shadow-none relative overflow-hidden py-32 px-6 flex flex-col items-center">
+          
+          {/* Subtle gradient orbs — lightweight, no animation */}
+          <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[600px] h-[600px] rounded-full bg-[var(--accent)]/10 blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--cta)]/5 blur-[100px] pointer-events-none" />
 
-        <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8 flex flex-col items-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-[14px] py-[4px] rounded-[20px] border border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[13px] text-[var(--text-secondary)]">
-            <Zap size={14} className="text-[var(--accent)]" />
-            AI-powered video processing
-          </div>
+          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-8 flex flex-col items-center">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 px-[14px] py-[6px] rounded-full border border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[13px] font-medium text-[var(--text-secondary)] shadow-sm">
+              <span className="w-2 h-2 rounded-sm bg-[var(--accent)]" />
+              AI-powered video processing
+            </div>
 
-          {/* Heading */}
-          <h1 className="text-[64px] font-normal tracking-tight leading-[1.1] font-serif">
-            <span className="text-[var(--text-primary)]">
-              Your media,
-            </span>
-            <br />
-            <span className="text-[var(--cta)] italic">
-              processed in seconds.
-            </span>
-          </h1>
+            {/* Heading */}
+            <h1 className="text-[56px] sm:text-[72px] font-normal tracking-tight leading-[1.05] font-serif">
+              <span className="text-[var(--text-primary)] block dark:hidden">
+                Video processing
+              </span>
+              <span className="text-[var(--accent)] italic block dark:hidden">
+                built for creators.
+              </span>
+              <span className="text-[var(--text-primary)] hidden dark:block">
+                Your media,
+              </span>
+              <span className="text-[var(--cta)] italic hidden dark:block">
+                processed in seconds.
+              </span>
+            </h1>
 
-          {/* Subtitle */}
-          <p className="text-[18px] text-[var(--text-secondary)] max-w-[520px] mx-auto leading-[1.7] font-sans">
-            Transcode, edit, and deliver video at any resolution — all in one platform.
-          </p>
+            {/* Subtitle */}
+            <p className="text-[18px] sm:text-[20px] text-[var(--text-secondary)] max-w-[500px] mx-auto leading-[1.6] font-sans">
+              Transcode, edit, and deliver video at any resolution — all in one platform.
+            </p>
 
-          {/* CTA */}
-          <div className="flex items-center justify-center gap-4 pt-2">
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-[8px] px-[24px] py-[12px] bg-[var(--cta)] hover:bg-[var(--cta-hover)] text-white text-sm font-medium transition-colors duration-200"
-            >
-              Start for free
-              <ArrowRight size={16} />
-            </Link>
-            <Link
-              href="#features"
-              className="inline-flex items-center gap-2 rounded-[8px] px-[24px] py-[12px] border border-[var(--bg-border)] bg-transparent hover:bg-[var(--bg-elevated)] text-[var(--accent)] text-sm font-medium transition-colors duration-200"
-            >
-              See how it works
-            </Link>
+            {/* CTA */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center justify-center gap-2 rounded-[8px] px-8 py-3.5 bg-[var(--cta)] hover:opacity-90 text-white text-[15px] font-medium transition-opacity duration-200"
+              >
+                Start for free &rarr;
+              </Link>
+              <Link
+                href="#features"
+                className="inline-flex items-center justify-center gap-2 rounded-[8px] px-8 py-3.5 bg-[var(--accent-subtle)] text-[var(--accent)] hover:opacity-80 text-[15px] font-medium transition-opacity duration-200"
+              >
+                See how it works
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -189,88 +148,7 @@ export default function Home() {
       </section>
 
       {/* ─── Pricing Section ─── */}
-      <section
-        id="pricing"
-        className="w-full max-w-6xl mx-auto px-6 py-24"
-      >
-        <div className="text-center mb-16 space-y-4">
-          <p className="text-sm font-medium text-[var(--accent)] uppercase tracking-wider">
-            Pricing
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
-            Simple, transparent pricing
-          </h2>
-          <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
-            Start free, upgrade when you need more power. No hidden fees.
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          {pricingPlans.map((plan) => {
-            const isHighlighted = selectedPlan === plan.name;
-            return (
-              <div
-                key={plan.name}
-                onClick={() => setSelectedPlan(plan.name)}
-                className={`cursor-pointer relative flex flex-col p-8 rounded-xl border transition-all duration-300 ${
-                  isHighlighted
-                    ? "border-[var(--accent)] bg-[var(--accent-subtle)]"
-                    : "border-[var(--bg-border)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)]"
-                }`}
-              >
-                {isHighlighted && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-[var(--accent)] text-xs font-semibold text-white">
-                    Selected
-                  </div>
-                )}
-
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-1 text-[var(--text-primary)]">{plan.name}</h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-[var(--text-primary)]">{plan.price}</span>
-                    <span className="text-sm text-[var(--text-secondary)]">
-                      {plan.period}
-                    </span>
-                  </div>
-                  <p className="text-sm text-[var(--text-secondary)] mt-2">
-                    {plan.description}
-                  </p>
-                </div>
-
-                <ul className="space-y-3 mb-8 flex-1">
-                  {plan.features.map((f, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm">
-                      {f.included ? (
-                        <CheckIcon size={16} className="text-emerald-500 shrink-0" />
-                      ) : (
-                        <X size={16} className="text-[var(--text-muted)] shrink-0" />
-                      )}
-                      <span
-                        className={
-                          f.included ? "text-[var(--text-primary)]" : "text-[var(--text-muted)]"
-                        }
-                      >
-                        {f.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href="/billing"
-                  className={`inline-flex items-center justify-center h-10 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                    isHighlighted
-                      ? "bg-[var(--accent)] text-white hover:opacity-90"
-                      : "border border-[var(--bg-border)] text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"
-                  }`}
-                >
-                  {plan.cta}
-                </Link>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      <PricingSection />
 
       {/* ─── CTA Section ─── */}
       <section className="w-full max-w-4xl mx-auto px-6 py-24 text-center">
