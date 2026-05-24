@@ -39,22 +39,6 @@ export const replaceBackground = actionClient
         )}/${parts[1]}`
       : `${parts[0]}/upload/e_gen_background_replace/${parts[1]}`;
 
-    // Poll the URL to check if the image is processed
-    let isProcessed = false;
-    const maxAttempts = 60;
-    const delay = 1000; // 1 second
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(bgReplaceUrl);
-      if (isProcessed) {
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    if (!isProcessed) {
-      throw new Error("Image processing timed out");
-    }
     const secureUrl = bgReplaceUrl.replace("http://", "https://");
-    console.log(secureUrl);
     return { success: secureUrl };
   });

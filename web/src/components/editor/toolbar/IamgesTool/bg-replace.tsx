@@ -73,6 +73,27 @@ export default function AIBackgroundReplace() {
               });
 
               if (res?.data?.success) {
+                let isProcessed = false;
+                const maxAttempts = 60;
+                const delay = 1000;
+                for (let attempt = 0; attempt < maxAttempts; attempt++) {
+                  try {
+                    const response = await fetch(res.data.success);
+                    if (response.ok) {
+                      isProcessed = true;
+                      break;
+                    }
+                  } catch (e) {
+                    // Ignore fetch errors during polling
+                  }
+                  await new Promise((resolve) => setTimeout(resolve, delay));
+                }
+
+                if (!isProcessed) {
+                  toast.error("Image processing failed or timed out.");
+                  return;
+                }
+
                 const newLayerId = crypto.randomUUID();
                 addLayer({
                   id: newLayerId,
@@ -87,11 +108,23 @@ export default function AIBackgroundReplace() {
                 setActiveLayer(newLayerId);
               }
               if (res?.serverError) {
-                toast.error(res.serverError);
+                toast.error(String(res.serverError));
+              }
+              if (res?.fetchError) {
+                toast.error(String(res.fetchError));
+              }
+              if (res?.validationErrors) {
+                toast.error("Validation Error");
               }
               if (res?.data?.error) {
-                toast.error(res.data.error);
+                toast.error(String(res.data.error));
               }
+              if (!res?.data?.success && !res?.serverError && !res?.fetchError) {
+                 toast.error("An unknown error occurred during generation.");
+              }
+            } catch (err) {
+              console.error("Action caught error:", err);
+              toast.error("A client error occurred");
             } finally {
               setGenerating(false);
             }
