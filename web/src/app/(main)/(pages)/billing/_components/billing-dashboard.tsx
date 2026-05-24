@@ -28,18 +28,23 @@ const BillingDashboard = (props: Props) => {
   }, []);
 
   const onPayment = async (id: string) => {
-    const { data } = await axios.post(
-      `/api/payment`,
-      {
-        priceId: id,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `/api/payment`,
+        { priceId: id },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      if (typeof data === "string" && data.startsWith("http")) {
+        window.location.assign(data);
+      } else {
+        console.error("Invalid response from Stripe:", data);
+        setLoading(false);
       }
-    );
-    window.location.assign(data);
+    } catch (error) {
+      console.error("Payment error:", error);
+      setLoading(false);
+    }
   };
 
   return (
