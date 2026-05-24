@@ -74,7 +74,7 @@ export default function AIBackgroundReplace() {
 
               if (res?.data?.success) {
                 let isProcessed = false;
-                const maxAttempts = 60;
+                const maxAttempts = 120;
                 const delay = 1000;
                 for (let attempt = 0; attempt < maxAttempts; attempt++) {
                   try {
@@ -82,6 +82,10 @@ export default function AIBackgroundReplace() {
                     if (response.ok) {
                       isProcessed = true;
                       break;
+                    }
+                    if (response.status === 400 || response.status === 500) {
+                      toast.error(`Cloudinary AI Error: ${response.statusText || response.status}. The AI failed to process this image.`);
+                      return; // break out of the function early
                     }
                   } catch (e) {
                     // Ignore fetch errors during polling
