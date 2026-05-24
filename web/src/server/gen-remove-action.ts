@@ -34,22 +34,6 @@ export const genRemove = actionClient
 
     const removeUrl = `${parts[0]}/upload/e_gen_remove:${prompt}/${parts[1]}`;
 
-    let isProcessed = false;
-    const maxAttempts = 60;
-    const delay = 1000;
-
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(removeUrl);
-      if (isProcessed) {
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    if (!isProcessed) {
-      throw new Error("Image processing timed out");
-    }
     const secureUrl = removeUrl.replace("http://", "https://");
-    console.log(secureUrl);
     return { success: secureUrl };
   });

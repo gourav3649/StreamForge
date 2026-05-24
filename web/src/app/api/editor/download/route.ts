@@ -45,24 +45,9 @@ export async function GET(request: NextRequest) {
       ? `${parts[0]}/upload/${selected}/${parts[1]}`
       : activeUrl!;
 
-    // Poll the URL to check if the image is processed
-    let isProcessed = false;
-    const maxAttempts = 60;
-    const delay = 1000; // 1 second
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(url);
-
-      if (isProcessed) {
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    if (!isProcessed) {
-      throw new Error("Image processing timed out");
-    }
+    const secureUrl = url.replace("http://", "https://");
     return NextResponse.json({
-      url: url.replace("http://", "https://"),
+      url: secureUrl,
       filename: `${publicId}.${quality}.${format}`,
     });
   } catch (error) {

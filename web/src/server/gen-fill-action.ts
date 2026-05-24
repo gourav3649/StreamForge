@@ -38,21 +38,6 @@ export const genFill = actionClient
     const fillUrl = `${parts[0]}/upload/ar_${aspect},b_gen_fill,c_pad,w_${width},h_${height}/${parts[1]}`;
     console.log(genFill);
 
-    // Poll the URL to check if the image is processed
-    let isProcessed = false;
-    const maxAttempts = 60;
-    const delay = 1000; // 1 second
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(fillUrl);
-      if (isProcessed) {
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    if (!isProcessed) {
-      return { error: "Image processing failed" };
-    }
     const secureUrl = fillUrl.replace("http://", "https://");
     return { success: secureUrl };
   });

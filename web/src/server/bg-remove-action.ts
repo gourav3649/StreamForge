@@ -36,23 +36,6 @@ export const bgRemoval = actionClient
     const parts = pngConvert.split("/upload/");
     const removeUrl = `${parts[0]}/upload/e_background_removal/${parts[1]}`;
 
-    // Poll the URL to check if the image is processed
-    let isProcessed = false;
-    const maxAttempts = 60;
-    const delay = 1000;
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      isProcessed = await checkImageProcessing(removeUrl);
-      //   console.log(removeUrl);
-      if (isProcessed) {
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
-    if (!isProcessed) {
-      throw new Error("Image processing timed out");
-    }
     const secureUrl = removeUrl.replace("http://", "https://");
-    console.log(secureUrl);
     return { success: secureUrl };
   });
