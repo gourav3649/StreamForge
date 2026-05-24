@@ -14,28 +14,38 @@ const Billing = async (props: Props) => {
     session_id: "",
   };
   if (session_id) {
-    const stripe = new Stripe(process.env.STRIPE_SECRET!, {
-      typescript: true,
-      apiVersion: "2024-11-20.acacia",
-    });
-
-    const session = await stripe.checkout.sessions.listLineItems(session_id);
-    const user = await currentUser();
-    if (user) {
-      await db.user.update({
-        where: {
-          clerkId: user.id,
-        },
-        data: {
-          tier: session.data[0].description,
-          credits:
-            session.data[0].description == "Unlimited"
-              ? "Unlimited"
-              : session.data[0].description == "Pro"
-              ? "100"
-              : "10",
-        },
+    try {
+      const stripe = new Stripe(process.env.STRIPE_SECRET!, {
+        typescript: true,
+        apiVersion: "2024-11-20.acacia",
       });
+
+      const session = await stripe.checkout.sessions.listLineItems(session_id);
+      const user = await currentUser();
+      if (user && session.data.length > 0) {
+        // Use upsert or try/catch around update in case the clerk webhook failed and user isn't in DB yet
+        const tierName = session.data[0].description;
+        const creditsAmount =
+          tierName === "Unlimited"
+            ? "Unlimited"
+            : tierName === "Pro"
+            ? "100"
+            : "10";
+
+        try {
+          await db.user.update({
+            where: { clerkId: user.id },
+            data: {
+              tier: tierName,
+              credits: creditsAmount,
+            },
+          });
+        } catch (dbError) {
+          console.error("Failed to update user in DB. They might not exist yet:", dbError);
+        }
+      }
+    } catch (error) {
+      console.error("Error processing Stripe session:", error);
     }
   }
 
