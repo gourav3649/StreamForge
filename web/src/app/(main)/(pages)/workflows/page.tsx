@@ -89,17 +89,22 @@ export default function Home() {
 
   };
 
-  const getAllVideos = async () => {
-    if (loading) return;
-    setLoading(true);
-    const res = await fetch("/api/video/redis-video");
-    const json = await res.json();
-    setVideos(json?.videos);
-    setLoading(false);
+  const getAllVideos = async (isBackground = false) => {
+    if (!isBackground) setLoading(true);
+    try {
+      const res = await fetch("/api/video/redis-video");
+      const json = await res.json();
+      setVideos(json?.videos || []);
+    } catch (error) {
+      console.error("Failed to fetch videos:", error);
+    } finally {
+      if (!isBackground) setLoading(false);
+    }
   };
 
   const startPolling = () => {
-    const id = setInterval(() => getAllVideos(), 5000);
+    if (intervalId) return;
+    const id = setInterval(() => getAllVideos(true), 3000);
     setIntervalId(id);
   };
 
@@ -113,6 +118,19 @@ export default function Home() {
   useEffect(() => {
     getAllVideos();
   }, []);
+
+  // Auto-start polling if there are pending videos
+  useEffect(() => {
+    const hasPending = videos?.some(
+      (v: any) => v.status === "QUEUE" || v.status === "PROCESSING"
+    );
+
+    if (hasPending && !intervalId) {
+      startPolling();
+    } else if (!hasPending && intervalId) {
+      stopPolling();
+    }
+  }, [videos, intervalId]);
 
   const statusColor = (status: string) => {
     switch (status) {
