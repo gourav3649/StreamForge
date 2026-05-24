@@ -65,7 +65,8 @@ export const extractImage = actionClient
       if (!isProcessed) {
         throw new Error("Image processing timed out");
       }
-      console.log(extractUrl);
-      return { success: extractUrl };
+      const secureUrl = extractUrl.replace("http://", "https://");
+      console.log(secureUrl);
+      return { success: secureUrl };
     }
   );

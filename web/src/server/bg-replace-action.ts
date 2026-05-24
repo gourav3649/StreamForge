@@ -54,6 +54,7 @@ export const replaceBackground = actionClient
     if (!isProcessed) {
       throw new Error("Image processing timed out");
     }
-    console.log(bgReplaceUrl);
-    return { success: bgReplaceUrl };
+    const secureUrl = bgReplaceUrl.replace("http://", "https://");
+    console.log(secureUrl);
+    return { success: secureUrl };
   });

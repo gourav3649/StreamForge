@@ -53,5 +53,6 @@ export const genFill = actionClient
     if (!isProcessed) {
       return { error: "Image processing failed" };
     }
-    return { success: fillUrl };
+    const secureUrl = fillUrl.replace("http://", "https://");
+    return { success: secureUrl };
   });

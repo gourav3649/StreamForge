@@ -49,33 +49,35 @@ export default function SmartCrop() {
       return;
     }
     setGenerating(true);
-    const res = await genCrop({
-      height: activeLayer.height!.toString(),
-      aspect: aspectRatio,
-      activeVideo: activeLayer.url!,
-    });
-
-    if (res?.data?.success) {
-      console.log(res.data.success);
-      setGenerating(false);
-      const newLayerId = crypto.randomUUID();
-      const thumbnailUrl = res.data.success.replace(/\.[^/.]+$/, ".jpg");
-      addLayer({
-        id: newLayerId,
-        name: "cropped " + activeLayer.name,
-        format: activeLayer.format,
-        height: height + activeLayer.height!,
-        width: width + activeLayer.width!,
-        url: res.data.success,
-        publicId: activeLayer.publicId,
-        resourceType: "video",
-        poster: thumbnailUrl,
+    try {
+      const res = await genCrop({
+        height: activeLayer.height!.toString(),
+        aspect: aspectRatio,
+        activeVideo: activeLayer.url!,
       });
-      toast.success(res.data.success);
-      setActiveLayer(newLayerId);
-    }
-    if (res?.data?.error) {
-      toast.error(res.data.error);
+
+      if (res?.data?.success) {
+        console.log(res.data.success);
+        const newLayerId = crypto.randomUUID();
+        const thumbnailUrl = res.data.success.replace(/\.[^/.]+$/, ".jpg");
+        addLayer({
+          id: newLayerId,
+          name: "cropped " + activeLayer.name,
+          format: activeLayer.format,
+          height: height + activeLayer.height!,
+          width: width + activeLayer.width!,
+          url: res.data.success,
+          publicId: activeLayer.publicId,
+          resourceType: "video",
+          poster: thumbnailUrl,
+        });
+        toast.success(res.data.success);
+        setActiveLayer(newLayerId);
+      }
+      if (res?.data?.error) {
+        toast.error(res.data.error);
+      }
+    } finally {
       setGenerating(false);
     }
   };

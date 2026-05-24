@@ -49,5 +49,6 @@ export const genCrop = actionClient
     if (!isProcessed) {
       return { error: "Video processing failed" };
     }
-    return { success: fillUrl };
+    const secureUrl = fillUrl.replace("http://", "https://");
+    return { success: secureUrl };
   });

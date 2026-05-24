@@ -75,30 +75,32 @@ export default function GenerativeFill() {
 
   const handleGenFill = async () => {
     setGenerating(true);
-    const res = await genFill({
-      width: (width + activeLayer.width!).toString(),
-      height: (height + activeLayer.height!).toString(),
-      aspect: "1:1",
-      activeImage: activeLayer.url!,
-    });
-    if (res?.data?.success) {
-      console.log(res.data.success);
-      setGenerating(false);
-      const newLayerId = crypto.randomUUID();
-      addLayer({
-        id: newLayerId,
-        name: "generative-fill",
-        format: activeLayer.format,
-        height: height + activeLayer.height!,
-        width: width + activeLayer.width!,
-        url: res.data.success,
-        publicId: activeLayer.publicId,
-        resourceType: "image",
+    try {
+      const res = await genFill({
+        width: (width + activeLayer.width!).toString(),
+        height: (height + activeLayer.height!).toString(),
+        aspect: "1:1",
+        activeImage: activeLayer.url!,
       });
-      setActiveLayer(newLayerId);
-    }
-    if (res?.data?.error) {
-      console.log(res.data.error);
+      if (res?.data?.success) {
+        console.log(res.data.success);
+        const newLayerId = crypto.randomUUID();
+        addLayer({
+          id: newLayerId,
+          name: "generative-fill",
+          format: activeLayer.format,
+          height: height + activeLayer.height!,
+          width: width + activeLayer.width!,
+          url: res.data.success,
+          publicId: activeLayer.publicId,
+          resourceType: "image",
+        });
+        setActiveLayer(newLayerId);
+      }
+      if (res?.data?.error) {
+        console.log(res.data.error);
+      }
+    } finally {
       setGenerating(false);
     }
   };

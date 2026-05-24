@@ -60,25 +60,27 @@ export default function GenRemove() {
           disabled={generating}
           onClick={async () => {
             setGenerating(true);
-            const res = await genRemove({
-              activeImage: activeLayer.url!,
-              prompt: activeTag,
-            });
-            if (res?.data?.success) {
-              setGenerating(false);
-
-              const newLayerId = crypto.randomUUID();
-              addLayer({
-                id: newLayerId,
-                url: res.data.success,
-                format: activeLayer.format,
-                height: activeLayer.height,
-                width: activeLayer.width,
-                name: activeLayer.name,
-                publicId: activeLayer.publicId,
-                resourceType: "image",
+            try {
+              const res = await genRemove({
+                activeImage: activeLayer.url!,
+                prompt: activeTag,
               });
-              setActiveLayer(newLayerId);
+              if (res?.data?.success) {
+                const newLayerId = crypto.randomUUID();
+                addLayer({
+                  id: newLayerId,
+                  url: res.data.success,
+                  format: activeLayer.format,
+                  height: activeLayer.height,
+                  width: activeLayer.width,
+                  name: activeLayer.name,
+                  publicId: activeLayer.publicId,
+                  resourceType: "image",
+                });
+                setActiveLayer(newLayerId);
+              }
+            } finally {
+              setGenerating(false);
             }
           }}
         >

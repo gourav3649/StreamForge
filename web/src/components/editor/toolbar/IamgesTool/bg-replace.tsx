@@ -66,25 +66,28 @@ export default function AIBackgroundReplace() {
               return;
             }
             setGenerating(true);
-            const res = await replaceBackground({
-              prompt: prompt,
-              activeImage: activeLayer.url!,
-            });
-
-            if (res?.data?.success) {
-              const newLayerId = crypto.randomUUID();
-              addLayer({
-                id: newLayerId,
-                name: "bg-replaced-" + activeLayer.name,
-                format: activeLayer.format,
-                height: activeLayer.height,
-                width: activeLayer.width,
-                url: res.data.success,
-                publicId: activeLayer.publicId,
-                resourceType: "image",
+            try {
+              const res = await replaceBackground({
+                prompt: prompt,
+                activeImage: activeLayer.url!,
               });
+
+              if (res?.data?.success) {
+                const newLayerId = crypto.randomUUID();
+                addLayer({
+                  id: newLayerId,
+                  name: "bg-replaced-" + activeLayer.name,
+                  format: activeLayer.format,
+                  height: activeLayer.height,
+                  width: activeLayer.width,
+                  url: res.data.success,
+                  publicId: activeLayer.publicId,
+                  resourceType: "image",
+                });
+                setActiveLayer(newLayerId);
+              }
+            } finally {
               setGenerating(false);
-              setActiveLayer(newLayerId);
             }
           }}
         >

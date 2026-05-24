@@ -52,6 +52,7 @@ export const bgRemoval = actionClient
     if (!isProcessed) {
       throw new Error("Image processing timed out");
     }
-    console.log(removeUrl);
-    return { success: removeUrl };
+    const secureUrl = removeUrl.replace("http://", "https://");
+    console.log(secureUrl);
+    return { success: secureUrl };
   });
