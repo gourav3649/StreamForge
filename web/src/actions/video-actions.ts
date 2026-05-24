@@ -6,6 +6,7 @@ import { VideoStatus } from "@prisma/client";
 import { currentUserData } from "./user-actions";
 import { Video } from "@/lib/types";
 import { redirect } from "next/navigation";
+import { deductCredit } from "./billing-actions";
 
 type VideoTypes = {
   title?: string;
@@ -20,6 +21,12 @@ export const createVideo = async (data: VideoTypes) => {
     const user = await currentUser();
     if (!user) {
       throw new Error("Not authenticated");
+    }
+
+    // --- Credit gate: check & deduct 1 credit before processing ---
+    const creditResult = await deductCredit();
+    if (!creditResult.success) {
+      throw new Error(creditResult.reason || "Insufficient credits");
     }
 
     // Upsert the user — handles the case where the Clerk webhook

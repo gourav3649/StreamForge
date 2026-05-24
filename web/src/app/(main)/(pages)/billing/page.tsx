@@ -20,11 +20,20 @@ const Billing = async (props: Props) => {
         apiVersion: "2024-11-20.acacia",
       });
 
-      const session = await stripe.checkout.sessions.listLineItems(session_id);
+      // Retrieve the session itself (not line items) to get our metadata
+      const session = await stripe.checkout.sessions.retrieve(session_id, {
+        expand: ["line_items.data.price.product"],
+      });
+
       const user = await currentUser();
-      if (user && session.data.length > 0) {
-        // Use upsert or try/catch around update in case the clerk webhook failed and user isn't in DB yet
-        const tierName = session.data[0].description;
+      if (user && session.payment_status === "paid") {
+        // We embed tier in metadata at checkout creation time
+        const tierName: string =
+          (session.metadata?.tier as string) ||
+          // fallback: try to read from line item price nickname
+          (session.line_items?.data?.[0]?.price?.nickname as string) ||
+          "Free";
+
         const creditsAmount =
           tierName === "Unlimited"
             ? "Unlimited"
@@ -40,8 +49,9 @@ const Billing = async (props: Props) => {
               credits: creditsAmount,
             },
           });
+          console.log(`[billing] Updated user ${user.id} → tier=${tierName}, credits=${creditsAmount}`);
         } catch (dbError) {
-          console.error("Failed to update user in DB. They might not exist yet:", dbError);
+          console.error("Failed to update user in DB:", dbError);
         }
       }
     } catch (error) {

@@ -79,9 +79,13 @@ export default function Home() {
 
       toast.success("Video uploaded and queued for processing");
       getAllVideos();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
-      toast.error("Upload failed");
+      if (error?.message?.toLowerCase().includes("credit")) {
+        toast.error("Not enough credits. Please upgrade your plan.");
+      } else {
+        toast.error("Upload failed. Please try again.");
+      }
     } finally {
       setIsUploading(false);
       setFile(null);

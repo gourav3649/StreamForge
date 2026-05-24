@@ -7,11 +7,13 @@ import { UserButton } from "@clerk/nextjs";
 import MobileSideBar from "../sidebar/MobileSideBar";
 import { useBilling } from "../providers/billing-provider";
 import { onPaymentDetails } from "@/app/(main)/(pages)/billing/_actions/payment-connecetions";
+import { usePathname } from "next/navigation";
 
 type Props = {};
 
 const InfoBar = (props: Props) => {
   const { credits, tier, setCredits, setTier } = useBilling();
+  const pathname = usePathname();
 
   const onGetPayment = async () => {
     const response = await onPaymentDetails();
@@ -21,9 +23,10 @@ const InfoBar = (props: Props) => {
     }
   };
 
+  // Refresh credits every time the route changes
   useEffect(() => {
     onGetPayment();
-  }, []);
+  }, [pathname]);
 
   return (
     <div className="flex flex-row justify-end gap-6 items-center px-4 py-3 w-full dark:bg-black/50 backdrop-blur-sm border-b border-white/[0.06]">
