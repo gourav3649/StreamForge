@@ -2,7 +2,7 @@
 import React from "react";
 
 type Props = {
-  onPayment(id: string): void;
+  onPayment(id: string, tier: string): void;
   products: any[];
   tier: string;
 };
@@ -17,12 +17,23 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const SubscriptionCard = ({ onPayment, products, tier }: Props) => {
-  //   console.log(products);
+  // Log products from Stripe to diagnose nickname/tier mapping
+  console.log("[SubscriptionCard] Stripe products:", JSON.stringify(products.map((p: any) => ({ id: p.id, nickname: p.nickname }))));
   return (
     <section className="flex w-full justify-center md:flex-row flex-col gap-6 px-6 max-w-5xl mx-auto">
       {products &&
         products.map((product: any) => {
-          const isPro = product.nickname === "Pro";
+          // Determine the tier name for this product.
+          // product.nickname is what Stripe returns for the price nickname.
+          // We normalise it here to one of: "Free" | "Pro" | "Unlimited"
+          const rawNickname: string = product.nickname || "";
+          const tierName =
+            rawNickname.toLowerCase().includes("unlimited")
+              ? "Unlimited"
+              : rawNickname.toLowerCase().includes("pro")
+              ? "Pro"
+              : "Free";
+          const isPro = tierName === "Pro";
           return (
             <Card 
               className={`relative flex flex-col p-6 w-full max-w-sm rounded-[16px] bg-[var(--bg-surface)] border ${isPro ? "border-2 border-[var(--accent)]" : "border border-[var(--bg-border)]"} shadow-none`} 
@@ -62,8 +73,8 @@ export const SubscriptionCard = ({ onPayment, products, tier }: Props) => {
                     Active Plan
                   </Button>
                 ) : (
-                  <Button 
-                    onClick={() => onPayment(product.id)} 
+                  <Button
+                    onClick={() => onPayment(product.id, tierName)} 
                     variant={isPro ? "default" : "outline"}
                     className={`w-full font-medium rounded-md h-9 text-[13px] transition-colors ${isPro ? "bg-[var(--accent)] text-white hover:opacity-90 border-none" : "border-[var(--bg-border)] bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"}`}
                   >

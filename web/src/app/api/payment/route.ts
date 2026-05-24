@@ -32,21 +32,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing priceId" }, { status: 400 });
     }
 
-    // Resolve the price nickname → tier name
-    const price = await stripe.prices.retrieve(data.priceId);
-    const tierName = (price.nickname as string) || "Free";
+    // Use the tier name sent from the frontend (most reliable source).
+    // Fallback: look up the price nickname from Stripe.
+    let tierName: string = data.tier || "";
+    if (!tierName) {
+      const price = await stripe.prices.retrieve(data.priceId);
+      tierName = (price.nickname as string) || "Free";
+    }
 
     const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price: data.priceId,
-          quantity: 1,
-        },
-      ],
+      line_items: [{ price: data.priceId, quantity: 1 }],
       mode: "subscription",
-      // Embed the tier name in metadata so billing/page.tsx can read it reliably
+      // Embed tier in metadata (server-side) AND in the success URL (client-side)
+      // so billing/page.tsx can read it reliably without another Stripe API call.
       metadata: { tier: tierName },
-      success_url: `${process.env.NEXT_PUBLIC_URL}/billing?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.NEXT_PUBLIC_URL}/billing?session_id={CHECKOUT_SESSION_ID}&tier=${encodeURIComponent(tierName)}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/billing`,
     });
     return NextResponse.json(session.url);

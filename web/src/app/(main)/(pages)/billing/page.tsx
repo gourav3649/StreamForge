@@ -10,46 +10,53 @@ type Props = {
 };
 
 const Billing = async (props: Props) => {
-  const { session_id } = props.searchParams ?? {
-    session_id: "",
-  };
+  const { session_id, tier: tierParam } = props.searchParams ?? {};
+
   if (session_id) {
     try {
-      const stripe = new Stripe(process.env.STRIPE_SECRET!, {
-        typescript: true,
-        apiVersion: "2024-11-20.acacia",
-      });
-
-      // Retrieve the session itself (not line items) to get our metadata
-      const session = await stripe.checkout.sessions.retrieve(session_id, {
-        expand: ["line_items.data.price.product"],
-      });
-
       const user = await currentUser();
-      if (user && session.payment_status === "paid") {
-        // We embed tier in metadata at checkout creation time
-        const tierName: string =
-          (session.metadata?.tier as string) ||
-          // fallback: try to read from line item price nickname
-          (session.line_items?.data?.[0]?.price?.nickname as string) ||
-          "Free";
+      if (user) {
+        // Primary: read tier from the URL param we embedded at checkout creation.
+        // Fallback: retrieve from Stripe session metadata.
+        let tierName = tierParam || "";
+
+        if (!tierName) {
+          const stripe = new Stripe(process.env.STRIPE_SECRET!, {
+            typescript: true,
+            apiVersion: "2024-11-20.acacia",
+          });
+          const session = await stripe.checkout.sessions.retrieve(session_id);
+          tierName =
+            (session.metadata?.tier as string) ||
+            "Free";
+          console.log("[billing] Fallback Stripe session metadata tier:", tierName, "| payment_status:", session.payment_status);
+        }
+
+        // Normalise to known values
+        const normalisedTier =
+          tierName.toLowerCase().includes("unlimited")
+            ? "Unlimited"
+            : tierName.toLowerCase().includes("pro")
+            ? "Pro"
+            : "Free";
 
         const creditsAmount =
-          tierName === "Unlimited"
+          normalisedTier === "Unlimited"
             ? "Unlimited"
-            : tierName === "Pro"
+            : normalisedTier === "Pro"
             ? "100"
             : "10";
+
+        console.log(`[billing] Updating user ${user.id} → tier=${normalisedTier}, credits=${creditsAmount}`);
 
         try {
           await db.user.update({
             where: { clerkId: user.id },
             data: {
-              tier: tierName,
+              tier: normalisedTier,
               credits: creditsAmount,
             },
           });
-          console.log(`[billing] Updated user ${user.id} → tier=${tierName}, credits=${creditsAmount}`);
         } catch (dbError) {
           console.error("Failed to update user in DB:", dbError);
         }
@@ -61,8 +68,8 @@ const Billing = async (props: Props) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="sticky top-0 z-[10] flex items-center justify-between border-b bg-background/50 p-6 text-4xl backdrop-blur-lg">
-        <span>Billing</span>
+      <h1 className="sticky top-0 z-[10] flex items-center justify-between border-b border-[var(--bg-border)] bg-[var(--bg-base)]/80 p-6 text-[32px] font-bold font-serif backdrop-blur-lg">
+        Billing
       </h1>
       <BillingDashboard />
     </div>

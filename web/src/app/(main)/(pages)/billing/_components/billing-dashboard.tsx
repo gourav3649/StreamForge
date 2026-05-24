@@ -27,12 +27,12 @@ const BillingDashboard = (props: Props) => {
     onStripeProducts();
   }, []);
 
-  const onPayment = async (id: string) => {
+  const onPayment = async (id: string, tierName: string) => {
     try {
       setLoading(true);
       const { data } = await axios.post(
         `/api/payment`,
-        { priceId: id },
+        { priceId: id, tier: tierName },
         { headers: { "Content-Type": "application/json" } }
       );
       if (typeof data === "string" && data.startsWith("http")) {
