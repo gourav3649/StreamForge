@@ -193,6 +193,7 @@ export default function GenerativeFill() {
                 max={activeLayer.width}
                 value={width}
                 onChange={(e) => setWidth(parseInt(e.target.value))}
+                onPointerDown={(e) => e.stopPropagation()}
                 className="h-8"
               />
             </div>
@@ -206,6 +207,7 @@ export default function GenerativeFill() {
                 value={height}
                 step={2}
                 onChange={(e) => setHeight(parseInt(e.target.value))}
+                onPointerDown={(e) => e.stopPropagation()}
                 className="h-8"
               />
             </div>
