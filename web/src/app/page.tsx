@@ -99,7 +99,7 @@ const pricingPlans = [
 
 export default function Home() {
   return (
-    <main className="flex items-center justify-center flex-col bg-black text-white">
+    <main className="flex items-center justify-center flex-col bg-[var(--bg-base)] text-[var(--text-primary)]">
       <Navbar />
 
       {/* ─── Hero Section ─── */}

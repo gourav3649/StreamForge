@@ -12,6 +12,7 @@ import {
 } from "../ui/table";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Video as VideoIcon } from "lucide-react";
 
 type VideoTableProps = {
   videos: Video[];
@@ -37,7 +38,7 @@ const VideoTable = ({ videos }: VideoTableProps) => {
     return (
       <div className="flex flex-col items-center justify-center py-16 px-6 border border-dashed border-[var(--bg-border)] rounded-xl bg-transparent">
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-elevated)] mb-4">
-          <Video className="w-6 h-6 text-[var(--text-secondary)]" />
+          <VideoIcon className="w-6 h-6 text-[var(--text-secondary)]" />
         </div>
         <h3 className="text-lg font-medium text-[var(--text-primary)] font-sans mb-2">
           No media found

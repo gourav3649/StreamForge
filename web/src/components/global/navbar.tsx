@@ -7,18 +7,20 @@ import {
   Menu,
 } from "lucide-react";
 
+import { ModeToggle } from "./mode-toggle";
+
 type Props = {};
 
 const Navbar = async (props: Props) => {
   const user = await currentUser();
   return (
-    <header className="fixed right-0 left-0 top-0 py-4 px-6 bg-black/60 backdrop-blur-xl z-[100] flex items-center border-b border-white/[0.06] justify-between">
+    <header className="fixed right-0 left-0 top-0 py-4 px-6 bg-[var(--bg-surface)]/60 backdrop-blur-xl z-[100] flex items-center border-b border-[var(--bg-border)] justify-between">
       {/* Logo */}
       <aside className="flex items-center gap-2">
-        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600">
+        <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-[var(--accent)]">
           <Zap size={16} className="text-white" />
         </div>
-        <span className="text-xl font-semibold tracking-tight text-white">
+        <span className="text-xl font-semibold tracking-tight text-[var(--text-primary)]">
           StreamForge
         </span>
       </aside>
@@ -29,7 +31,7 @@ const Navbar = async (props: Props) => {
           <li>
             <Link
               href="#features"
-              className="text-sm text-neutral-400 hover:text-white transition-colors duration-200"
+              className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
             >
               Features
             </Link>
@@ -37,7 +39,7 @@ const Navbar = async (props: Props) => {
           <li>
             <Link
               href="#pricing"
-              className="text-sm text-neutral-400 hover:text-white transition-colors duration-200"
+              className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
             >
               Pricing
             </Link>
@@ -45,7 +47,7 @@ const Navbar = async (props: Props) => {
           <li>
             <Link
               href="/dashboard"
-              className="text-sm text-neutral-400 hover:text-white transition-colors duration-200"
+              className="text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
             >
               Dashboard
             </Link>
@@ -55,9 +57,10 @@ const Navbar = async (props: Props) => {
 
       {/* Right Side */}
       <aside className="flex items-center gap-4">
+        <ModeToggle />
         <Link
           href="/dashboard"
-          className="hidden sm:inline-flex items-center justify-center h-9 px-4 rounded-lg bg-white text-black text-sm font-medium hover:bg-neutral-200 transition-colors duration-200"
+          className="hidden sm:inline-flex items-center justify-center h-9 px-4 rounded-lg bg-[var(--cta)] hover:bg-[var(--cta-hover)] text-white text-sm font-medium transition-colors duration-200"
         >
           {user ? "Dashboard" : "Get Started"}
         </Link>
