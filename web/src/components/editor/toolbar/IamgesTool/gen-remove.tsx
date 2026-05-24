@@ -13,6 +13,7 @@ import { useEditorStore } from "@/store/editor-store";
 import { useLayerStore } from "@/store/layer-store";
 import { Eraser } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function GenRemove() {
   const generating = useEditorStore((state) => state.generating);
@@ -78,6 +79,12 @@ export default function GenRemove() {
                   resourceType: "image",
                 });
                 setActiveLayer(newLayerId);
+              }
+              if (res?.serverError) {
+                toast.error(res.serverError);
+              }
+              if (res?.data?.error) {
+                toast.error(res.data.error);
               }
             } finally {
               setGenerating(false);

@@ -86,6 +86,12 @@ export default function AIBackgroundReplace() {
                 });
                 setActiveLayer(newLayerId);
               }
+              if (res?.serverError) {
+                toast.error(res.serverError);
+              }
+              if (res?.data?.error) {
+                toast.error(res.data.error);
+              }
             } finally {
               setGenerating(false);
             }

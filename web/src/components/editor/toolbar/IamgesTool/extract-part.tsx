@@ -15,6 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useEditorStore } from "@/store/editor-store";
 import { useLayerStore } from "@/store/layer-store";
 import { extractImage } from "@/server/extract-action";
+import { toast } from "sonner";
 
 export default function ExtractPart() {
   const setGenerating = useEditorStore((state) => state.setGenerating);
@@ -137,6 +138,12 @@ export default function ExtractPart() {
                   resourceType: "image",
                 });
                 setActiveLayer(newLayerId);
+              }
+              if (res?.serverError) {
+                toast.error(res.serverError);
+              }
+              if (res?.data?.error) {
+                toast.error(res.data.error);
               }
             } finally {
               setGenerating(false);
