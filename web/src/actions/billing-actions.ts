@@ -34,18 +34,19 @@ export const deductCredit = async () => {
   if (!dbUser) return { success: false, reason: "User not found" };
 
   // Unlimited tier — never deduct
-  if (dbUser.credits === "Unlimited" || dbUser.tier === "Unlimited") {
+  // We use 999999 as the unlimited marker in the database since it's an Int.
+  if (dbUser.credits >= 99999 || dbUser.tier === "Unlimited") {
     return { success: true };
   }
 
-  const current = parseInt(dbUser.credits, 10);
+  const current = dbUser.credits;
   if (isNaN(current) || current <= 0) {
     return { success: false, reason: "Insufficient credits" };
   }
 
   await db.user.update({
     where: { id: dbUser.id },
-    data: { credits: String(current - 1) },
+    data: { credits: current - 1 },
   });
 
   return { success: true };

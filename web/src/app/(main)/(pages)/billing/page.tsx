@@ -42,10 +42,10 @@ const Billing = async (props: Props) => {
 
         const creditsAmount =
           normalisedTier === "Unlimited"
-            ? "Unlimited"
+            ? 999999
             : normalisedTier === "Pro"
-            ? "100"
-            : "10";
+            ? 100
+            : 10;
 
         console.log(`[billing] Updating user ${user.id} → tier=${normalisedTier}, credits=${creditsAmount}`);
 

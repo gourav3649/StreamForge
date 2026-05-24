@@ -7,7 +7,7 @@ type Props = {
 
 const CreditTracker = ({ credits, tier }: Props) => {
   const remaining = isNaN(credits) ? 0 : credits;
-  const isUnlimited = tier === "Unlimited" || remaining === Infinity;
+  const isUnlimited = tier === "Unlimited" || remaining >= 99999;
   const total = isUnlimited ? 100 : tier === "Pro" ? 100 : 10;
   const used = isUnlimited ? 0 : Math.max(0, total - remaining);
 

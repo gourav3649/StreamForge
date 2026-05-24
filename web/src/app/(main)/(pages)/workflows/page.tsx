@@ -72,10 +72,14 @@ export default function Home() {
 
       const s3Url = publicUrl;
 
-      await createVideo({
+      const video = await createVideo({
         title: file.name,
         originalUrl: s3Url,
       });
+
+      if (!video) {
+        throw new Error("Failed to create video or insufficient credits.");
+      }
 
       toast.success("Video uploaded and queued for processing");
       getAllVideos();
