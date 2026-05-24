@@ -35,7 +35,7 @@ export const genRemove = actionClient
     const removeUrl = `${parts[0]}/upload/e_gen_remove:${prompt}/${parts[1]}`;
 
     let isProcessed = false;
-    const maxAttempts = 10;
+    const maxAttempts = 60;
     const delay = 1000;
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {

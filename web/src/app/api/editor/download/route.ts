@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
 
     // Poll the URL to check if the image is processed
     let isProcessed = false;
-    const maxAttempts = 20;
+    const maxAttempts = 60;
     const delay = 1000; // 1 second
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       isProcessed = await checkImageProcessing(url);
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
       throw new Error("Image processing timed out");
     }
     return NextResponse.json({
-      url,
+      url: url.replace("http://", "https://"),
       filename: `${publicId}.${quality}.${format}`,
     });
   } catch (error) {

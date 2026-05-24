@@ -52,7 +52,7 @@ export const extractImage = actionClient
 
       // Poll the URL to check if the image is processed
       let isProcessed = false;
-      const maxAttempts = 20;
+      const maxAttempts = 60;
       const delay = 1000; // 1 second
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
         isProcessed = await checkImageProcessing(extractUrl);
