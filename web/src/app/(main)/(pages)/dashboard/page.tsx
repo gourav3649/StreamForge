@@ -3,36 +3,126 @@ import VideoTable from "@/components/video/video-table";
 import React from "react";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
+import Link from "next/link";
 
 const DashboardPage = async () => {
   const videos = await getVideos();
   const user = await currentUser();
-  let credits = "0";
+  let credits = 10;
+  let tier = "Free";
 
   if (user) {
     const dbUser = await db.user.findUnique({
       where: { clerkId: user.id },
     });
-    credits = dbUser?.credits || "10";
+    if (dbUser) {
+      credits = dbUser.credits;
+      tier = dbUser.tier;
+    }
   }
 
+  const isUnlimited = tier === "Unlimited" || credits >= 99999;
+  const creditsDisplay = isUnlimited ? "Unlimited" : credits;
+
   return (
-    <div className="flex flex-col gap-4 relative">
-      <h1 className="sticky top-0 z-[10] flex items-center justify-between border-b border-[var(--bg-border)] bg-[var(--bg-base)]/80 p-6 text-[32px] font-bold font-serif backdrop-blur-lg">
-        Dashboard
-      </h1>
-      <div className="p-6">
-        <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
-          <div className="flex-1 w-full bg-[var(--bg-base)] border border-[var(--bg-border)] rounded-lg p-4 flex flex-col justify-center h-[88px]">
-            <span className="text-[13px] text-[var(--text-secondary)] font-medium mb-1">Total videos</span>
-            <span className="text-2xl font-bold text-[var(--text-primary)]">{videos.length}</span>
+    <div className="space-y-6 px-4 sm:px-margin-desktop py-8">
+      {/* Header Section */}
+      <div className="flex justify-between items-end mb-4">
+        <div>
+          <h2 className="font-headline-lg text-headline-lg text-on-surface tracking-tight">Overview</h2>
+          <p className="text-on-surface-variant font-body-lg">Forging your digital masterpiece.</p>
+        </div>
+        <Link 
+          href="/workflows"
+          className="px-6 py-3 rounded-xl kinetic-gradient text-white font-bold kinetic-glow flex items-center gap-2 hover:brightness-110 transition-all active:scale-95"
+        >
+          <span className="material-symbols-outlined">add</span>
+          New Project
+        </Link>
+      </div>
+
+      {/* Bento Grid Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {/* Metric Card 1: Videos */}
+        <div className="lg:col-span-1 glass-panel rounded-2xl p-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+            <span className="material-symbols-outlined text-6xl">movie</span>
           </div>
-          <div className="flex-1 w-full bg-[var(--bg-base)] border border-[var(--bg-border)] rounded-lg p-4 flex flex-col justify-center h-[88px]">
-            <span className="text-[13px] text-[var(--text-secondary)] font-medium mb-1">Credits left</span>
-            <span className="text-2xl font-bold text-[var(--text-primary)]">{credits}</span>
+          <p className="font-label-md text-on-surface-variant uppercase tracking-widest text-xs mb-2">Videos Processed</p>
+          <div className="flex items-baseline gap-2">
+            <h3 className="font-headline-md text-headline-md text-primary">{videos.length}</h3>
+          </div>
+          <div className="mt-4 h-1 w-full bg-surface-container rounded-full overflow-hidden">
+            <div className="h-full kinetic-gradient w-full"></div>
           </div>
         </div>
-        <VideoTable videos={videos} />
+
+        {/* Metric Card 2: Credits */}
+        <div className="lg:col-span-1 glass-panel rounded-2xl p-6 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">
+            <span className="material-symbols-outlined text-6xl">token</span>
+          </div>
+          <p className="font-label-md text-on-surface-variant uppercase tracking-widest text-xs mb-2">Credits Remaining</p>
+          <div className="flex items-baseline gap-2">
+            <h3 className="font-headline-md text-headline-md text-secondary-fixed-dim">{creditsDisplay}</h3>
+            <span className="text-on-surface-variant font-medium text-sm">Tier: {tier}</span>
+          </div>
+          <div className="mt-4 h-1 w-full bg-surface-container rounded-full overflow-hidden">
+            <div className="h-full bg-secondary w-full"></div>
+          </div>
+        </div>
+
+        {/* Metric Card 3: Upgrade */}
+        <div className="lg:col-span-2 glass-panel rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden group bg-gradient-to-br from-surface-elevated to-surface">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="font-label-md text-on-surface-variant uppercase tracking-widest text-xs mb-2">Subscription</p>
+              <h3 className="font-headline-md text-headline-md text-on-surface">{tier} <span className="text-body-md text-on-surface-variant"> Plan</span></h3>
+            </div>
+            <div className="p-3 rounded-full bg-tertiary-container/20 text-tertiary">
+              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>cloud</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 mt-6">
+            <div className="flex-1 space-y-1">
+              <p className="text-sm text-on-surface-variant">Upgrade your plan to get access to 4K cinematic renders and AI generation tools.</p>
+            </div>
+            <Link href="/billing" className="px-4 py-2 border border-border-subtle rounded-lg text-xs font-bold hover:bg-surface-variant transition-colors">
+              Upgrade
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Activity Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Activity Table */}
+        <div className="lg:col-span-2 glass-panel rounded-3xl overflow-hidden">
+          <div className="px-8 py-6 border-b border-border-subtle flex justify-between items-center">
+            <h4 className="font-headline-sm text-headline-sm">Recent Tasks</h4>
+            <Link href="/workflows" className="text-primary font-bold text-sm hover:underline">View All</Link>
+          </div>
+          <div className="p-6 overflow-x-auto">
+            {/* We embed our existing VideoTable here for now to keep functionality, but wrap it nicely */}
+            <VideoTable videos={videos} />
+          </div>
+        </div>
+
+        {/* Featured Card / Sidebar Info */}
+        <div className="flex flex-col gap-6">
+          {/* Featured Workflow Card */}
+          <div className="glass-panel rounded-3xl p-8 relative overflow-hidden group h-full min-h-[300px]">
+            <div className="absolute inset-0 z-0">
+              <img alt="Featured Background" className="w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcs8GQZnvjDx6i2hIhYPMFY8qYPLaSvnnypMXCfF7NrD4pSP9gQ-lL7WsAVrUGwMGttD_85TjksTuupSLZM2PYLS1z2ALUZNhLtESVYBRDmBPWJrPQnbjSSsOLCv-VzVITkcMm6Juk6hNzijNwOXWLK3K-8dzaw_O5YK72N_4GjURWqL2rjkTt7HYuajV3vlMDTZiSJ3YFnqhnQR_G6MZ5FFOt9MvxAMxex8OEOqZ-R4MHyOlA3p3c4TgueKR-Lt9hINiPQrPm0N81" />
+            </div>
+            <div className="relative z-10 flex flex-col h-full">
+              <span className="inline-block px-3 py-1 rounded-lg bg-primary-container/20 text-primary text-xs font-bold uppercase mb-4 w-fit">New Update</span>
+              <h5 className="font-headline-sm text-headline-sm text-on-surface mb-2">Cinematic Forge v2.0</h5>
+              <p className="text-on-surface-variant text-sm flex-1">Apply cinematic grain, color grading, and AI stabilization in a single click using our latest engine.</p>
+              <Link href="/editor" className="mt-6 w-full py-3 text-center rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all">Launch Editor</Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

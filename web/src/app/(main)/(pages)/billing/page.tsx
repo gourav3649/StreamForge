@@ -1,6 +1,5 @@
 import React from "react";
 import Stripe from "stripe";
-
 import { db } from "@/lib/db";
 import BillingDashboard from "./_components/billing-dashboard";
 import { currentUser } from "@clerk/nextjs/server";
@@ -16,23 +15,16 @@ const Billing = async (props: Props) => {
     try {
       const user = await currentUser();
       if (user) {
-        // Primary: read tier from the URL param we embedded at checkout creation.
-        // Fallback: retrieve from Stripe session metadata.
         let tierName = tierParam || "";
-
         if (!tierName) {
           const stripe = new Stripe(process.env.STRIPE_SECRET!, {
             typescript: true,
             apiVersion: "2024-11-20.acacia",
           });
           const session = await stripe.checkout.sessions.retrieve(session_id);
-          tierName =
-            (session.metadata?.tier as string) ||
-            "Free";
-          console.log("[billing] Fallback Stripe session metadata tier:", tierName, "| payment_status:", session.payment_status);
+          tierName = (session.metadata?.tier as string) || "Free";
         }
-
-        // Normalise to known values
+        
         const normalisedTier =
           tierName.toLowerCase().includes("unlimited")
             ? "Unlimited"
@@ -46,8 +38,6 @@ const Billing = async (props: Props) => {
             : normalisedTier === "Pro"
             ? 100
             : 10;
-
-        console.log(`[billing] Updating user ${user.id} → tier=${normalisedTier}, credits=${creditsAmount}`);
 
         try {
           await db.user.update({
@@ -67,10 +57,11 @@ const Billing = async (props: Props) => {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h1 className="sticky top-0 z-[10] flex items-center justify-between border-b border-[var(--bg-border)] bg-[var(--bg-base)]/80 p-6 text-[32px] font-bold font-serif backdrop-blur-lg">
-        Billing
-      </h1>
+    <div className="space-y-6 px-4 sm:px-margin-desktop py-8 max-w-7xl mx-auto">
+      <div className="mb-10 text-center">
+        <h2 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mb-2">Billing & Plans</h2>
+        <p className="text-on-surface-variant font-body-lg">Manage your subscription and monitor usage.</p>
+      </div>
       <BillingDashboard />
     </div>
   );

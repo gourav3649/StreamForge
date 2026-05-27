@@ -2,87 +2,62 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { menuOptions } from "@/lib/constants";
 import clsx from "clsx";
-import { Separator } from "@/components/ui/separator";
-import { Zap } from "lucide-react";
-import { ModeToggle } from "../global/mode-toggle";
-import { cn } from "@/lib/utils";
+import { useUser } from "@clerk/nextjs";
 
 type Props = {
   className?: string;
 };
 
-const MenuOptions = ({ className }: Props) => {
+const Sidebar = ({ className }: Props) => {
   const pathName = usePathname();
+  const { user } = useUser();
 
   return (
-    <nav
-      className={cn(
-        "dark:bg-black h-screen overflow-scroll justify-between flex items-center flex-col gap-10 py-6 px-2 border-r border-white/[0.06]",
-        className
-      )}
-    >
-      <div className="flex items-center max-w-[80px] justify-center flex-col gap-8">
-        {/* StreamForge Logo */}
-        <Link
-          className="flex items-center justify-center flex-col gap-1"
-          href="/"
-        >
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600">
-            <Zap size={16} className="text-white" />
+    <aside className={clsx("h-screen w-64 fixed left-0 top-0 flex flex-col py-base bg-surface-container border-r border-border-subtle shadow-sm z-50", className)}>
+      <div className="px-gutter mb-10 mt-4">
+        <h1 className="font-headline-md text-headline-md font-bold text-primary tracking-tight">StreamForge</h1>
+        <p className="text-on-surface-variant text-sm mt-1">Premium AI Suite</p>
+      </div>
+
+      <nav className="flex-1 px-4 space-y-2">
+        {menuOptions.map((menuItem) => {
+          const isActive = pathName === menuItem.href;
+          return (
+            <Link
+              key={menuItem.name}
+              href={menuItem.href}
+              className={clsx(
+                "flex items-center gap-4 px-4 py-3 rounded-lg font-medium transition-colors duration-200",
+                isActive 
+                  ? "text-primary font-bold border-r-2 border-primary bg-primary-container/10" 
+                  : "text-on-surface-variant hover:bg-surface-variant hover:text-on-surface"
+              )}
+            >
+              {/* Note: In a real app we might map lucide icons to material-symbols, but since menuOptions has lucide icons, we can just use them! */}
+              <menuItem.Component className="w-5 h-5" />
+              <span className="font-label-md">{menuItem.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="mt-auto px-4 py-4 border-t border-border-subtle">
+        <div className="flex items-center gap-3 p-2 rounded-xl bg-surface-container-low border border-border-subtle">
+          <img 
+            alt="User Avatar" 
+            className="w-10 h-10 rounded-full object-cover" 
+            src={user?.imageUrl || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}
+          />
+          <div className="overflow-hidden">
+            <p className="text-on-surface font-bold truncate text-sm">{user?.fullName || "Guest"}</p>
+            <p className="text-on-surface-variant text-xs truncate">{user?.primaryEmailAddress?.emailAddress || "Welcome"}</p>
           </div>
-          <span className="text-[10px] font-semibold text-neutral-400 tracking-tight">
-            StreamForge
-          </span>
-        </Link>
-
-        <TooltipProvider>
-          {menuOptions.map((menuItem) => (
-            <ul key={menuItem.name}>
-              <Tooltip delayDuration={0}>
-                <TooltipTrigger>
-                  <li>
-                    <Link
-                      href={menuItem.href}
-                      className={clsx(
-                        "group h-10 w-10 flex items-center justify-center rounded-lg p-[3px] cursor-pointer transition-colors duration-200",
-                        {
-                          "bg-[var(--accent-subtle)]": pathName === menuItem.href,
-                          "bg-transparent hover:bg-[var(--bg-elevated)]": pathName !== menuItem.href
-                        }
-                      )}
-                    >
-                      <menuItem.Component
-                        selected={pathName === menuItem.href}
-                      />
-                    </Link>
-                  </li>
-                </TooltipTrigger>
-                <TooltipContent
-                  side="right"
-                  className="bg-[var(--bg-surface)] border border-[var(--bg-border)] text-[var(--text-primary)] font-sans text-[12px] px-3 py-1.5 rounded-md"
-                >
-                  <p>{menuItem.name}</p>
-                </TooltipContent>
-              </Tooltip>
-            </ul>
-          ))}
-        </TooltipProvider>
-
-        <Separator className="bg-white/[0.06]" />
+        </div>
       </div>
-      <div className="flex items-center justify-center flex-col gap-8 mt-[10px]">
-        <ModeToggle />
-      </div>
-    </nav>
+    </aside>
   );
 };
 
-export default MenuOptions;
+export default Sidebar;

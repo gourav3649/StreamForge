@@ -1,194 +1,305 @@
-import Navbar from "@/components/global/navbar";
 import Link from "next/link";
-import {
-  Zap,
-  Video,
-  Scissors,
-  Languages,
-  Shield,
-  BarChart3,
-  Image,
-  ArrowRight,
-} from "lucide-react";
-import PricingSection from "@/components/global/pricing";
+import { currentUser } from "@clerk/nextjs/server";
+import { UserButton } from "@clerk/nextjs";
 
-const features = [
-  {
-    icon: Video,
-    title: "Upload & Transcode",
-    description:
-      "Drag and drop your videos. We transcode into multiple resolutions (360p, 480p, 720p, 1080p) for seamless playback anywhere.",
-  },
-  {
-    icon: Scissors,
-    title: "AI Smart Crop",
-    description:
-      "Automatically reframe your videos for YouTube, TikTok, or Instagram using AI-powered content-aware cropping.",
-  },
-  {
-    icon: Languages,
-    title: "Auto Transcription",
-    description:
-      "Generate captions and subtitles in multiple languages with a single click. Make your content globally accessible.",
-  },
-  {
-    icon: Image,
-    title: "Background Removal",
-    description:
-      "Remove or replace backgrounds from images and video frames using Cloudinary's AI engine.",
-  },
-  {
-    icon: Shield,
-    title: "Secure Sharing",
-    description:
-      "Share videos with customizable embeds, domain locks, and expiration dates to keep your content protected.",
-  },
-  {
-    icon: BarChart3,
-    title: "Real-Time Analytics",
-    description:
-      "Track views, engagement, and watch time with a built-in analytics dashboard for every video.",
-  },
-];
+export default async function Home() {
+  const user = await currentUser();
 
-export default function Home() {
   return (
-    <main className="flex items-center justify-center flex-col bg-[var(--bg-base)] text-[var(--text-primary)]">
-      <Navbar />
-
-      {/* ─── Hero Section ─── */}
-      <section className="relative w-full flex flex-col items-center justify-center px-4 sm:px-6 pt-28 pb-16 bg-[var(--bg-base)] min-h-screen">
-        <div className="w-full max-w-5xl mx-auto rounded-[32px] bg-[var(--bg-surface)] border border-[var(--bg-border)] dark:bg-transparent dark:border-none shadow-sm dark:shadow-none relative overflow-hidden py-32 px-6 flex flex-col items-center">
-          
-          {/* Subtle gradient orbs — lightweight, no animation */}
-          <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[600px] h-[600px] rounded-full bg-[var(--accent)]/10 blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-[var(--cta)]/5 blur-[100px] pointer-events-none" />
-
-          <div className="relative z-10 max-w-3xl mx-auto text-center space-y-8 flex flex-col items-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-[14px] py-[6px] rounded-full border border-[var(--bg-border)] bg-[var(--bg-elevated)] text-[13px] font-medium text-[var(--text-secondary)] shadow-sm">
-              <span className="w-2 h-2 rounded-sm bg-[var(--accent)]" />
-              AI-powered video processing
+    <div className="font-body-md text-body-md bg-background text-on-surface overflow-x-hidden min-h-screen">
+      {/* Top Navigation Bar */}
+      <header className="fixed top-0 left-0 right-0 h-16 z-50 bg-surface/80 backdrop-blur-xl flex justify-between items-center px-4 sm:px-margin-desktop shadow-md border-b border-border-subtle">
+        <div className="flex items-center gap-base">
+          <span className="font-headline-sm text-headline-sm font-bold text-primary">StreamForge</span>
+        </div>
+        <nav className="hidden md:flex gap-gutter items-center">
+          <Link href="#features" className="text-on-surface-variant font-medium hover:text-primary transition-all">Workflows</Link>
+          <Link href="#pricing" className="text-on-surface-variant font-medium hover:text-primary transition-all">Pricing</Link>
+          <Link href="#" className="text-on-surface-variant font-medium hover:text-primary transition-all">Docs</Link>
+        </nav>
+        <div className="flex items-center gap-gutter">
+          <div className="hidden sm:flex items-center gap-base text-primary font-bold bg-primary-container/10 px-4 py-1.5 rounded-full border border-primary/20">
+            <span className="material-symbols-outlined text-sm">payments</span>
+            <span className="font-label-md text-label-md">Unlimited Credits</span>
+          </div>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link href="/dashboard" className="primary-gradient text-white px-6 py-2 rounded-lg font-bold hover:brightness-110 active:scale-95 transition-all">Dashboard</Link>
+              <UserButton afterSignOutUrl="/" />
             </div>
+          ) : (
+            <Link href="/dashboard" className="primary-gradient text-white px-6 py-2 rounded-lg font-bold hover:brightness-110 active:scale-95 transition-all">Get Started</Link>
+          )}
+        </div>
+      </header>
 
-            {/* Heading */}
-            <h1 className="text-[56px] sm:text-[72px] font-normal tracking-tight leading-[1.05] font-serif">
-              <span className="text-[var(--text-primary)] block dark:hidden">
-                Video processing
-              </span>
-              <span className="text-[var(--accent)] italic block dark:hidden">
-                built for creators.
-              </span>
-              <span className="text-[var(--text-primary)] hidden dark:block">
-                Your media,
-              </span>
-              <span className="text-[var(--cta)] italic hidden dark:block">
-                processed in seconds.
-              </span>
+      <main className="relative pt-16">
+        {/* Ambient Kinetic Backgrounds */}
+        <div className="kinetic-glow-bg top-0 -left-64" />
+        <div className="kinetic-glow-bg bottom-0 -right-64" />
+
+        {/* Hero Section */}
+        <section className="relative min-h-[921px] flex flex-col items-center justify-center text-center px-4 sm:px-margin-desktop py-24 overflow-hidden">
+          <div className="max-w-4xl z-10">
+            <span className="font-label-md text-label-md text-primary uppercase tracking-widest mb-base block">Obsidian Kinetic Engine</span>
+            <h1 className="font-display-lg text-display-lg mb-gutter animate-fade-in text-white leading-tight">
+              Automate your <span className="text-transparent bg-clip-text primary-gradient">media engine</span>
             </h1>
-
-            {/* Subtitle */}
-            <p className="text-[18px] sm:text-[20px] text-[var(--text-secondary)] max-w-[500px] mx-auto leading-[1.6] font-sans">
-              Transcode, edit, and deliver video at any resolution — all in one platform.
+            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+              The premium AI suite for creators. Seamlessly transcode video, generate cinematic assets, and automate production workflows with high-performance cloud infrastructure.
             </p>
-
-            {/* CTA */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center justify-center gap-2 rounded-[8px] px-8 py-3.5 bg-[var(--cta)] hover:opacity-90 text-white text-[15px] font-medium transition-opacity duration-200"
-              >
-                Start for free &rarr;
-              </Link>
-              <Link
-                href="#features"
-                className="inline-flex items-center justify-center gap-2 rounded-[8px] px-8 py-3.5 bg-[var(--accent-subtle)] text-[var(--accent)] hover:opacity-80 text-[15px] font-medium transition-opacity duration-200"
-              >
-                See how it works
-              </Link>
+            <div className="flex flex-col sm:flex-row gap-gutter justify-center items-center">
+              <Link href="/dashboard" className="primary-gradient text-white px-10 py-4 rounded-xl font-bold text-lg hover:brightness-110 shadow-[0_0_30px_rgba(244,63,94,0.3)] transition-all">Get Started Free</Link>
+              <button className="bg-surface-elevated text-on-surface border border-border-subtle px-10 py-4 rounded-xl font-bold text-lg hover:bg-surface-variant transition-all flex items-center gap-2">
+                <span className="material-symbols-outlined">play_circle</span> Watch Demo
+              </button>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ─── Features Section ─── */}
-      <section
-        id="features"
-        className="w-full max-w-6xl mx-auto px-6 py-24"
-      >
-        <div className="text-center mb-16 space-y-4">
-          <p className="text-sm font-medium text-[var(--accent)] uppercase tracking-wider">
-            Features
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
-            Everything you need for video
-          </h2>
-          <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
-            From transcoding to AI editing, StreamForge gives you a complete
-            toolkit to process, enhance, and share your media.
-          </p>
-        </div>
-
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="group p-6 rounded-xl border border-[var(--bg-border)] bg-[var(--bg-surface)] hover:bg-[var(--bg-elevated)] transition-all duration-300 shadow-sm"
-            >
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--accent-subtle)] mb-4">
-                <feature.icon size={20} className="text-[var(--accent)]" />
+          {/* Hero Image/Visual */}
+          <div className="mt-20 w-full max-w-5xl rounded-2xl overflow-hidden glass-card shadow-2xl relative">
+            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-60" />
+            <img alt="StreamForge Workspace" className="w-full h-auto object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6shZRwB55lKIKmhvK6VnPwmKWYp7nnf2QYIZZ39D7F2I0Sc_o8XeK82b0ilBN5YbbdJ9nemXE7O-Y1sBUGzGx1HHiqri5U2JyIsA1EHwMM4wroKW9mxr_JdM3ktsDrZ-_x5aGhcWF7fDrZneMumVUS_u3Nejnx2ja7GMBsl_7SRE-mmcnud7X0chz96bvNuPxK1McfnigjnxaJZFVfIKxwQ2_-7VGZtmPnr0kuktmHtdVTVDpN0zo8MDR47z_A5beMWDMPBE2OcPK" />
+            <div className="absolute bottom-10 left-10 right-10 flex justify-between items-end">
+              <div className="glass-card p-4 rounded-lg flex items-center gap-4">
+                <div className="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>movie_edit</span>
+                </div>
+                <div className="text-left">
+                  <p className="font-bold text-white">Transcoding Stream</p>
+                  <p className="text-body-sm text-on-surface-variant">4K ProRes to H.265 • 89%</p>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)]">{feature.title}</h3>
-              <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
-                {feature.description}
-              </p>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ─── Pricing Section ─── */}
-      <PricingSection />
-
-      {/* ─── CTA Section ─── */}
-      <section className="w-full max-w-4xl mx-auto px-6 py-24 text-center">
-        <div className="relative p-12 sm:p-16 rounded-2xl border border-[var(--bg-border)] bg-[var(--bg-surface)] overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--accent-subtle),transparent_70%)] pointer-events-none" />
-          <div className="relative z-10 space-y-6">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--text-primary)]">
-              Ready to streamline your workflow?
-            </h2>
-            <p className="text-[var(--text-secondary)] max-w-lg mx-auto">
-              Join StreamForge and start processing your videos with AI-powered
-              tools today. No credit card required.
-            </p>
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center gap-2 h-12 px-8 rounded-lg bg-[var(--text-primary)] text-[var(--bg-base)] text-sm font-semibold hover:opacity-90 transition-opacity duration-200"
-            >
-              Get Started Free
-              <ArrowRight size={16} />
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ─── Footer ─── */}
-      <footer className="w-full border-t border-[var(--bg-border)] py-8 px-6 bg-[var(--bg-base)]">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-6 h-6 rounded-md bg-[var(--accent)]">
-              <Zap size={12} className="text-white" />
+        {/* Features Bento Grid */}
+        <section className="px-4 sm:px-margin-desktop py-24 max-w-container-max mx-auto" id="features">
+          <div className="text-center mb-16">
+            <h2 className="font-headline-lg text-headline-lg text-white mb-base">Forge the Impossible</h2>
+            <p className="text-on-surface-variant max-w-xl mx-auto">Harness the power of neural networks and distributed cloud nodes to accelerate your creative process.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[600px]">
+            {/* AI Image Editing */}
+            <div className="md:col-span-8 glass-card rounded-2xl overflow-hidden p-gutter relative group">
+              <div className="z-10 relative h-full flex flex-col justify-end">
+                <span className="material-symbols-outlined text-primary text-4xl mb-base">image_search</span>
+                <h3 className="font-headline-sm text-headline-sm text-white mb-base">Neural Image Re-imagination</h3>
+                <p className="text-on-surface-variant max-w-md">Edit assets with natural language. Remove backgrounds, upscale to 8K, and generate variations in seconds without leaving your workspace.</p>
+              </div>
+              <img alt="AI Editing Interface" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCliZs_UpObRCMNAogu3Kner4VT2qFRf-hj3yFE1s-PFLBAN2VmKtCQsRnnGL2ALb8r1QRC7RsOb3LJpgmLNnGWp5d8bG8dF4j5UnZ-zpFmkI0joDffn-aobggLfHSjffghpNGgEDt983TtFnR9Vzd5hoa-jMuPuEg3ZaoSsxBo427W_-v5ArMI5i3cknCiraIlRUz77_dgYaNMJvPN8PcxS1Ld0en5dQeidVCwfUwwl4DpHOB6zrJZel6LZpxSgzy2Ca4VzSdonGd" />
             </div>
-            <span className="text-sm font-medium text-[var(--text-secondary)]">
-              StreamForge
-            </span>
+
+            {/* Video Transcoding */}
+            <div className="md:col-span-4 glass-card rounded-2xl p-gutter flex flex-col justify-between border-tertiary/20">
+              <div>
+                <div className="w-14 h-14 bg-tertiary/10 rounded-xl flex items-center justify-center text-tertiary mb-gutter">
+                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>cloud_sync</span>
+                </div>
+                <h3 className="font-headline-sm text-headline-sm text-white mb-base">Elite Transcoding</h3>
+                <p className="text-on-surface-variant">Distributed GPU nodes handle your most demanding 8K renders. Support for H.265, AV1, and ProRes RAW with sub-second latency.</p>
+              </div>
+              <div className="mt-base">
+                <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+                  <div className="h-full primary-gradient w-[75%]" />
+                </div>
+                <p className="text-body-sm text-on-surface-variant mt-2 flex justify-between">
+                  <span>Processing...</span>
+                  <span>75%</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Workflows */}
+            <div className="md:col-span-4 glass-card rounded-2xl p-gutter">
+              <span className="material-symbols-outlined text-secondary text-4xl mb-base">account_tree</span>
+              <h3 className="font-headline-sm text-headline-sm text-white mb-base">Visual Workflows</h3>
+              <p className="text-on-surface-variant">Connect your favorite apps and automate the boring parts of media management with a node-based editor.</p>
+            </div>
+
+            {/* Global Distribution */}
+            <div className="md:col-span-8 glass-card rounded-2xl p-gutter overflow-hidden relative">
+              <div className="flex flex-col md:flex-row items-center gap-gutter h-full">
+                <div className="flex-1 z-10">
+                  <h3 className="font-headline-sm text-headline-sm text-white mb-base">Global Mesh Delivery</h3>
+                  <p className="text-on-surface-variant">Your content, everywhere, instantly. Our edge network ensures zero buffering for your audience, no matter where they are.</p>
+                </div>
+                <div className="flex-1 w-full h-48 md:h-full relative opacity-50">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+                  <div className="flex flex-wrap gap-2 items-center justify-center h-full">
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-secondary" />
+                    <span className="w-2 h-2 rounded-full bg-tertiary" />
+                    <span className="w-2 h-2 rounded-full bg-primary opacity-30" />
+                    <span className="w-2 h-2 rounded-full bg-white opacity-20" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-sm text-[var(--text-muted)]">
-            © {new Date().getFullYear()} StreamForge. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </main>
+        </section>
+
+        {/* Pricing Section */}
+        <section className="px-4 sm:px-margin-desktop py-24 bg-surface-container-lowest" id="pricing">
+          <div className="max-w-container-max mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="font-headline-lg text-headline-lg text-white mb-base">Fuel Your Growth</h2>
+              <p className="text-on-surface-variant max-w-xl mx-auto">Transparent pricing designed for creators at every stage of their journey.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter items-stretch">
+              {/* Free Tier */}
+              <div className="glass-card rounded-2xl p-gutter flex flex-col border-border-subtle hover:border-white/20 transition-all">
+                <div className="mb-gutter">
+                  <h3 className="font-headline-sm text-headline-sm text-white mb-1">Free</h3>
+                  <p className="text-on-surface-variant mb-gutter">For early creators</p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-white">$0</span>
+                    <span className="text-on-surface-variant">/month</span>
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-10 flex-grow">
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    10 Monthly Credits
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    720p Max Quality
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    Community Support
+                  </li>
+                </ul>
+                <Link href="/dashboard" className="w-full py-4 text-center rounded-xl border border-white/20 font-bold hover:bg-white/10 transition-all">Start For Free</Link>
+              </div>
+
+              {/* Pro Tier */}
+              <div className="glass-card rounded-2xl p-gutter flex flex-col border-primary/50 relative shadow-[0_0_40px_rgba(244,63,94,0.1)] md:scale-105 z-10">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 primary-gradient text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Most Popular</div>
+                <div className="mb-gutter">
+                  <h3 className="font-headline-sm text-headline-sm text-white mb-1">Pro</h3>
+                  <p className="text-on-surface-variant mb-gutter">100 credits included</p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-white">$49</span>
+                    <span className="text-on-surface-variant">/month</span>
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-10 flex-grow">
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    100 Monthly Credits
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    4K Cinematic Renders
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    Priority Node Access
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    Custom Automations
+                  </li>
+                </ul>
+                <Link href="/dashboard" className="w-full py-4 text-center rounded-xl primary-gradient text-white font-bold hover:brightness-110 shadow-lg shadow-primary/20 transition-all">Get Pro Now</Link>
+              </div>
+
+              {/* Unlimited Tier */}
+              <div className="glass-card rounded-2xl p-gutter flex flex-col border-border-subtle hover:border-white/20 transition-all">
+                <div className="mb-gutter">
+                  <h3 className="font-headline-sm text-headline-sm text-white mb-1">Unlimited</h3>
+                  <p className="text-on-surface-variant mb-gutter">For studios & power users</p>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-4xl font-bold text-white">$199</span>
+                    <span className="text-on-surface-variant">/month</span>
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-10 flex-grow">
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    Unlimited AI Generations
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    8K Multi-track Rendering
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    1-on-1 Dedicated Support
+                  </li>
+                  <li className="flex gap-3 items-center text-on-surface">
+                    <span className="material-symbols-outlined text-primary text-xl">check_circle</span>
+                    Early Beta Access
+                  </li>
+                </ul>
+                <Link href="/dashboard" className="w-full py-4 text-center rounded-xl border border-white/20 font-bold hover:bg-white/10 transition-all">Contact Sales</Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="px-4 sm:px-margin-desktop py-32 text-center relative">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full primary-gradient opacity-10 blur-[120px] rounded-full" />
+          <div className="max-w-3xl mx-auto z-10 relative">
+            <h2 className="font-headline-lg text-headline-lg text-white mb-gutter">Ready to forge your future?</h2>
+            <p className="text-on-surface-variant text-lg mb-10">Join 15,000+ creators who are already automating their production workflows with StreamForge.</p>
+            <div className="flex flex-col sm:flex-row gap-gutter justify-center items-center">
+              <input className="bg-surface border border-border-subtle text-white px-6 py-4 rounded-xl w-full sm:w-80 focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" placeholder="Enter your email" type="email" />
+              <Link href="/dashboard" className="primary-gradient text-center text-white px-10 py-4 rounded-xl font-bold w-full sm:w-auto hover:brightness-110 transition-all">Get Started</Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="px-4 sm:px-margin-desktop py-16 bg-background border-t border-border-subtle">
+          <div className="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+            <div className="max-w-xs">
+              <span className="font-headline-sm text-headline-sm font-bold text-primary mb-4 block">StreamForge</span>
+              <p className="text-on-surface-variant">The leading platform for autonomous media production and AI-driven creative workflows. Built for the next generation of digital storytellers.</p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-16">
+              <div>
+                <h4 className="font-bold text-white mb-6">Product</h4>
+                <ul className="space-y-4 text-on-surface-variant">
+                  <li><Link className="hover:text-primary transition-colors" href="#">Workflows</Link></li>
+                  <li><Link className="hover:text-primary transition-colors" href="#">Transcoding</Link></li>
+                  <li><Link className="hover:text-primary transition-colors" href="#">AI Studio</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-bold text-white mb-6">Resources</h4>
+                <ul className="space-y-4 text-on-surface-variant">
+                  <li><Link className="hover:text-primary transition-colors" href="#">Documentation</Link></li>
+                  <li><Link className="hover:text-primary transition-colors" href="#">API Reference</Link></li>
+                  <li><Link className="hover:text-primary transition-colors" href="#">Blog</Link></li>
+                </ul>
+              </div>
+              <div className="col-span-2 sm:col-span-1">
+                <h4 className="font-bold text-white mb-6">Connect</h4>
+                <div className="flex gap-4">
+                  <Link className="w-10 h-10 rounded-lg bg-surface-elevated border border-border-subtle flex items-center justify-center hover:text-primary transition-all" href="#">
+                    <span className="material-symbols-outlined text-sm">share</span>
+                  </Link>
+                  <Link className="w-10 h-10 rounded-lg bg-surface-elevated border border-border-subtle flex items-center justify-center hover:text-primary transition-all" href="#">
+                    <span className="material-symbols-outlined text-sm">alternate_email</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="max-w-container-max mx-auto mt-16 pt-base border-t border-border-subtle flex flex-col sm:flex-row justify-between items-center text-body-sm text-on-surface-variant">
+            <p>© 2024 StreamForge Inc. All rights reserved.</p>
+            <div className="flex gap-gutter mt-4 sm:mt-0">
+              <Link className="hover:text-white transition-colors" href="#">Privacy Policy</Link>
+              <Link className="hover:text-white transition-colors" href="#">Terms of Service</Link>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
   );
 }

@@ -7,25 +7,11 @@ type Props = {
   tier: string;
 };
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
 export const SubscriptionCard = ({ onPayment, products, tier }: Props) => {
-  // Log products from Stripe to diagnose nickname/tier mapping
-  console.log("[SubscriptionCard] Stripe products:", JSON.stringify(products.map((p: any) => ({ id: p.id, nickname: p.nickname }))));
   return (
-    <section className="flex w-full justify-center md:flex-row flex-col gap-6 px-6 max-w-5xl mx-auto">
+    <section className="flex w-full justify-center lg:flex-row flex-col gap-6 px-6 max-w-6xl mx-auto">
       {products &&
         products.map((product: any) => {
-          // Determine the tier name for this product.
-          // product.nickname is what Stripe returns for the price nickname.
-          // We normalise it here to one of: "Free" | "Pro" | "Unlimited"
           const rawNickname: string = product.nickname || "";
           const tierName =
             rawNickname.toLowerCase().includes("unlimited")
@@ -34,55 +20,57 @@ export const SubscriptionCard = ({ onPayment, products, tier }: Props) => {
               ? "Pro"
               : "Free";
           const isPro = tierName === "Pro";
+          const isActive = tierName === tier;
+
           return (
-            <Card 
-              className={`relative flex flex-col p-6 w-full max-w-sm rounded-[16px] bg-[var(--bg-surface)] border ${isPro ? "border-2 border-[var(--accent)]" : "border border-[var(--bg-border)]"} shadow-none`} 
+            <div 
               key={product.id}
+              className={`glass-panel rounded-2xl p-8 flex flex-col flex-1 relative transition-all duration-300 ${isPro ? "border-primary/50 shadow-[0_0_40px_rgba(244,63,94,0.1)] lg:scale-105 z-10" : "border-border-subtle hover:border-white/20"}`}
             >
               {isPro && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-[var(--accent)] text-white text-[11px] font-medium px-4 py-1 rounded-full whitespace-nowrap">
-                  Most popular
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 kinetic-gradient text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+                  Most Popular
                 </div>
               )}
-              <CardHeader className="p-0 mb-2">
-                <CardTitle className="text-[16px] font-medium text-[var(--text-primary)]">{product.nickname}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-4 p-0 flex-grow">
-                <CardDescription className="text-[13px] text-[var(--text-secondary)] leading-relaxed m-0 h-[40px]">
-                  {product.nickname == "Unlimited"
-                    ? "Unlimited credits\nFor power users"
-                    : product.nickname == "Pro"
-                    ? "100 credits/mo\nBest for growing projects"
-                    : "10 credits/mo\nFree forever"}
-                </CardDescription>
-                
-                <div className="flex flex-col mt-auto pb-4">
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-semibold text-[20px] text-[var(--text-primary)] font-sans">
-                      {product.nickname == "Free"
-                        ? "Free/mo"
-                        : product.nickname == "Pro"
-                        ? "$29.99/mo"
-                        : "$99.99/mo"}
-                    </span>
-                  </div>
+              
+              <div className="mb-6">
+                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-1">{product.nickname}</h3>
+                <p className="text-on-surface-variant text-sm mb-6 h-10">
+                  {tierName === "Unlimited"
+                    ? "Unlimited credits for power users."
+                    : tierName === "Pro"
+                    ? "100 credits/mo. Best for growing projects."
+                    : "10 credits/mo. Free forever."}
+                </p>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-white">
+                    {tierName === "Free"
+                        ? "$0"
+                        : tierName === "Pro"
+                        ? "$29.99"
+                        : "$99.99"}
+                  </span>
+                  <span className="text-on-surface-variant">/month</span>
                 </div>
-                
-                {product.nickname == tier ? (
-                  <Button disabled variant="outline" className="w-full border-[var(--bg-border)] text-[var(--text-muted)] bg-[var(--bg-elevated)] font-medium rounded-md h-9 text-[13px]">
+              </div>
+
+              <div className="flex-1"></div>
+              
+              <div className="mt-8">
+                {isActive ? (
+                  <button disabled className="w-full py-4 text-center rounded-xl bg-surface-container border border-border-subtle text-on-surface-variant font-bold cursor-not-allowed">
                     Active Plan
-                  </Button>
+                  </button>
                 ) : (
-                  <Button
+                  <button
                     onClick={() => onPayment(product.id, tierName)} 
-                    variant={isPro ? "default" : "outline"}
-                    className={`w-full font-medium rounded-md h-9 text-[13px] transition-colors ${isPro ? "bg-[var(--accent)] text-white hover:opacity-90 border-none" : "border-[var(--bg-border)] bg-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-elevated)]"}`}
+                    className={`w-full py-4 text-center rounded-xl font-bold transition-all ${isPro ? "kinetic-gradient text-white shadow-lg hover:brightness-110 active:scale-95" : "bg-white/5 border border-white/10 text-white hover:bg-white/10 active:scale-95"}`}
                   >
-                    {product.nickname === "Free" ? "Select" : "Upgrade"}
-                  </Button>
+                    {tierName === "Free" ? "Downgrade" : "Upgrade Now"}
+                  </button>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           );
         })}
     </section>

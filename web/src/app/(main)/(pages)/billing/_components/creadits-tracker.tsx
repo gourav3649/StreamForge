@@ -14,18 +14,32 @@ const CreditTracker = ({ credits, tier }: Props) => {
   const usedPercent = isUnlimited ? 0 : Math.min(100, Math.max(0, (used / total) * 100));
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-6 pb-6">
-      <div className="flex flex-col gap-3 p-4 rounded-xl border border-[var(--bg-border)] bg-[var(--bg-elevated)] w-full">
-        <h3 className="text-[13px] font-medium text-[var(--text-primary)]">Credit tracker</h3>
-        <div className="w-full bg-[var(--bg-base)] h-3 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-[var(--accent)] rounded-full transition-all duration-500"
-            style={{ width: `${usedPercent}%` }}
-          />
+    <div className="w-full max-w-5xl mx-auto px-6 pb-6 mt-8">
+      <div className="flex flex-col gap-4 p-8 rounded-2xl glass-panel border border-border-subtle w-full max-w-3xl mx-auto relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-5">
+          <span className="material-symbols-outlined text-8xl">bolt</span>
         </div>
-        <div className="flex justify-between items-center text-[11px] text-[var(--text-secondary)] font-medium">
-          <span>{isUnlimited ? "Unlimited credits" : `${used} credits used`}</span>
-          <span>{isUnlimited ? "∞" : `${total} total`}</span>
+        
+        <div className="relative z-10">
+          <h3 className="font-headline-sm text-headline-sm text-on-surface mb-2">Usage & Credits</h3>
+          <p className="text-on-surface-variant text-sm mb-6">Monitor your API calls and resource usage for the current billing cycle.</p>
+          
+          <div className="flex justify-between items-end mb-2">
+            <div>
+              <span className="text-3xl font-bold text-primary">{isUnlimited ? "Unlimited" : used}</span>
+              <span className="text-on-surface-variant ml-2">credits used</span>
+            </div>
+            <div className="text-on-surface-variant font-medium">
+              <span>{isUnlimited ? "∞" : `${total} total`}</span>
+            </div>
+          </div>
+          
+          <div className="w-full bg-surface-container h-3 rounded-full overflow-hidden">
+            <div
+              className="h-full kinetic-gradient rounded-full transition-all duration-1000 ease-out"
+              style={{ width: `${usedPercent}%` }}
+            />
+          </div>
         </div>
       </div>
     </div>
