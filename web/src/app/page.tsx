@@ -56,87 +56,43 @@ export default async function Home() {
             </div>
           </div>
 
-          {/* Hero Image/Visual */}
-          <div className="mt-20 w-full max-w-5xl rounded-2xl overflow-hidden glass-card shadow-2xl relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-60" />
-            <img alt="StreamForge Workspace" className="w-full h-auto object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6shZRwB55lKIKmhvK6VnPwmKWYp7nnf2QYIZZ39D7F2I0Sc_o8XeK82b0ilBN5YbbdJ9nemXE7O-Y1sBUGzGx1HHiqri5U2JyIsA1EHwMM4wroKW9mxr_JdM3ktsDrZ-_x5aGhcWF7fDrZneMumVUS_u3Nejnx2ja7GMBsl_7SRE-mmcnud7X0chz96bvNuPxK1McfnigjnxaJZFVfIKxwQ2_-7VGZtmPnr0kuktmHtdVTVDpN0zo8MDR47z_A5beMWDMPBE2OcPK" />
-            <div className="absolute bottom-10 left-10 right-10 flex justify-between items-end">
-              <div className="glass-card p-4 rounded-lg flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>movie_edit</span>
-                </div>
-                <div className="text-left">
-                  <p className="font-bold text-white">Transcoding Stream</p>
-                  <p className="text-body-sm text-on-surface-variant">4K ProRes to H.265 • 89%</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </section>
 
-        {/* Features Bento Grid */}
+        {/* Core Features */}
         <section className="px-4 sm:px-margin-desktop py-24 max-w-container-max mx-auto" id="features">
           <div className="text-center mb-16">
-            <h2 className="font-headline-lg text-headline-lg text-white mb-base">Forge the Impossible</h2>
-            <p className="text-on-surface-variant max-w-xl mx-auto">Harness the power of neural networks and distributed cloud nodes to accelerate your creative process.</p>
+            <h2 className="font-headline-lg text-headline-lg text-white mb-base">Streamline Your Pipeline</h2>
+            <p className="text-on-surface-variant max-w-xl mx-auto">Powerful, scalable tools designed for professional creators and studios.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter h-auto md:h-[600px]">
-            {/* AI Image Editing */}
-            <div className="md:col-span-8 glass-card rounded-2xl overflow-hidden p-gutter relative group">
-              <div className="z-10 relative h-full flex flex-col justify-end">
-                <span className="material-symbols-outlined text-primary text-4xl mb-base">image_search</span>
-                <h3 className="font-headline-sm text-headline-sm text-white mb-base">Neural Image Re-imagination</h3>
-                <p className="text-on-surface-variant max-w-md">Edit assets with natural language. Remove backgrounds, upscale to 8K, and generate variations in seconds without leaving your workspace.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+            
+            {/* Feature 1 */}
+            <div className="glass-card rounded-2xl p-8 hover:border-primary/50 transition-all group">
+              <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>video_camera_front</span>
               </div>
-              <img alt="AI Editing Interface" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCliZs_UpObRCMNAogu3Kner4VT2qFRf-hj3yFE1s-PFLBAN2VmKtCQsRnnGL2ALb8r1QRC7RsOb3LJpgmLNnGWp5d8bG8dF4j5UnZ-zpFmkI0joDffn-aobggLfHSjffghpNGgEDt983TtFnR9Vzd5hoa-jMuPuEg3ZaoSsxBo427W_-v5ArMI5i3cknCiraIlRUz77_dgYaNMJvPN8PcxS1Ld0en5dQeidVCwfUwwl4DpHOB6zrJZel6LZpxSgzy2Ca4VzSdonGd" />
+              <h3 className="font-headline-sm text-headline-sm text-white mb-4">Cloud Transcoding</h3>
+              <p className="text-on-surface-variant">Process large media files asynchronously in the background. Convert 4K raw footage to web-optimized formats with zero local overhead.</p>
             </div>
 
-            {/* Video Transcoding */}
-            <div className="md:col-span-4 glass-card rounded-2xl p-gutter flex flex-col justify-between border-tertiary/20">
-              <div>
-                <div className="w-14 h-14 bg-tertiary/10 rounded-xl flex items-center justify-center text-tertiary mb-gutter">
-                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>cloud_sync</span>
-                </div>
-                <h3 className="font-headline-sm text-headline-sm text-white mb-base">Elite Transcoding</h3>
-                <p className="text-on-surface-variant">Distributed GPU nodes handle your most demanding 8K renders. Support for H.265, AV1, and ProRes RAW with sub-second latency.</p>
+            {/* Feature 2 */}
+            <div className="glass-card rounded-2xl p-8 hover:border-tertiary/50 transition-all group">
+              <div className="w-14 h-14 bg-tertiary/10 rounded-xl flex items-center justify-center text-tertiary mb-6 group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>auto_fix</span>
               </div>
-              <div className="mt-base">
-                <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden">
-                  <div className="h-full primary-gradient w-[75%]" />
-                </div>
-                <p className="text-body-sm text-on-surface-variant mt-2 flex justify-between">
-                  <span>Processing...</span>
-                  <span>75%</span>
-                </p>
-              </div>
+              <h3 className="font-headline-sm text-headline-sm text-white mb-4">AI Media Editor</h3>
+              <p className="text-on-surface-variant">Intelligently remove backgrounds, apply smart cropping, and generate seamless asset variations directly within your browser.</p>
             </div>
 
-            {/* Workflows */}
-            <div className="md:col-span-4 glass-card rounded-2xl p-gutter">
-              <span className="material-symbols-outlined text-secondary text-4xl mb-base">account_tree</span>
-              <h3 className="font-headline-sm text-headline-sm text-white mb-base">Visual Workflows</h3>
-              <p className="text-on-surface-variant">Connect your favorite apps and automate the boring parts of media management with a node-based editor.</p>
+            {/* Feature 3 */}
+            <div className="glass-card rounded-2xl p-8 hover:border-secondary/50 transition-all group">
+              <div className="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary mb-6 group-hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: "'FILL' 1" }}>account_tree</span>
+              </div>
+              <h3 className="font-headline-sm text-headline-sm text-white mb-4">Automated Workflows</h3>
+              <p className="text-on-surface-variant">Connect your favorite apps and platforms to automate the tedious parts of media management and delivery.</p>
             </div>
 
-            {/* Global Distribution */}
-            <div className="md:col-span-8 glass-card rounded-2xl p-gutter overflow-hidden relative">
-              <div className="flex flex-col md:flex-row items-center gap-gutter h-full">
-                <div className="flex-1 z-10">
-                  <h3 className="font-headline-sm text-headline-sm text-white mb-base">Global Mesh Delivery</h3>
-                  <p className="text-on-surface-variant">Your content, everywhere, instantly. Our edge network ensures zero buffering for your audience, no matter where they are.</p>
-                </div>
-                <div className="flex-1 w-full h-48 md:h-full relative opacity-50">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
-                  <div className="flex flex-wrap gap-2 items-center justify-center h-full">
-                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    <span className="w-2 h-2 rounded-full bg-secondary" />
-                    <span className="w-2 h-2 rounded-full bg-tertiary" />
-                    <span className="w-2 h-2 rounded-full bg-primary opacity-30" />
-                    <span className="w-2 h-2 rounded-full bg-white opacity-20" />
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
 
