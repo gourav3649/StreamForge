@@ -95,9 +95,9 @@ const DashboardPage = async () => {
       </div>
 
       {/* Recent Activity Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="w-full">
         {/* Activity Table */}
-        <div className="lg:col-span-2 glass-panel rounded-3xl overflow-hidden">
+        <div className="glass-panel rounded-3xl overflow-hidden">
           <div className="px-8 py-6 border-b border-border-subtle flex justify-between items-center">
             <h4 className="font-headline-sm text-headline-sm">Recent Tasks</h4>
             <Link href="/workflows" className="text-primary font-bold text-sm hover:underline">View All</Link>
@@ -105,22 +105,6 @@ const DashboardPage = async () => {
           <div className="p-6 overflow-x-auto">
             {/* We embed our existing VideoTable here for now to keep functionality, but wrap it nicely */}
             <VideoTable videos={videos} />
-          </div>
-        </div>
-
-        {/* Featured Card / Sidebar Info */}
-        <div className="flex flex-col gap-6">
-          {/* Featured Workflow Card */}
-          <div className="glass-panel rounded-3xl p-8 relative overflow-hidden group h-full min-h-[300px]">
-            <div className="absolute inset-0 z-0">
-              <img alt="Featured Background" className="w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-1000" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcs8GQZnvjDx6i2hIhYPMFY8qYPLaSvnnypMXCfF7NrD4pSP9gQ-lL7WsAVrUGwMGttD_85TjksTuupSLZM2PYLS1z2ALUZNhLtESVYBRDmBPWJrPQnbjSSsOLCv-VzVITkcMm6Juk6hNzijNwOXWLK3K-8dzaw_O5YK72N_4GjURWqL2rjkTt7HYuajV3vlMDTZiSJ3YFnqhnQR_G6MZ5FFOt9MvxAMxex8OEOqZ-R4MHyOlA3p3c4TgueKR-Lt9hINiPQrPm0N81" />
-            </div>
-            <div className="relative z-10 flex flex-col h-full">
-              <span className="inline-block px-3 py-1 rounded-lg bg-primary-container/20 text-primary text-xs font-bold uppercase mb-4 w-fit">New Update</span>
-              <h5 className="font-headline-sm text-headline-sm text-on-surface mb-2">Cinematic Forge v2.0</h5>
-              <p className="text-on-surface-variant text-sm flex-1">Apply cinematic grain, color grading, and AI stabilization in a single click using our latest engine.</p>
-              <Link href="/editor" className="mt-6 w-full py-3 text-center rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-all">Launch Editor</Link>
-            </div>
           </div>
         </div>
       </div>
