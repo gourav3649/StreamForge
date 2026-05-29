@@ -22,7 +22,7 @@ export const getUserCredits = async () => {
  * Deduct one credit from the current user.
  * Returns { success: true } or { success: false, reason: "..." }
  */
-export const deductCredit = async () => {
+export const deductCredit = async (amount: number = 99) => {
   const user = await currentUser();
   if (!user) return { success: false, reason: "Not authenticated" };
 
@@ -40,13 +40,13 @@ export const deductCredit = async () => {
   }
 
   const current = dbUser.credits;
-  if (isNaN(current) || current <= 0) {
+  if (isNaN(current) || current < amount) {
     return { success: false, reason: "Insufficient credits" };
   }
 
   await db.user.update({
     where: { id: dbUser.id },
-    data: { credits: current - 1 },
+    data: { credits: current - amount },
   });
 
   return { success: true };
