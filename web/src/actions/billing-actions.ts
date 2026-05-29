@@ -22,7 +22,7 @@ export const getUserCredits = async () => {
  * Deduct one credit from the current user.
  * Returns { success: true } or { success: false, reason: "..." }
  */
-export const deductCredit = async (amount: number = 99) => {
+export const deductCredit = async (amount: number = 5) => {
   const user = await currentUser();
   if (!user) return { success: false, reason: "Not authenticated" };
 
